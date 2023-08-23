@@ -169,41 +169,6 @@ class CPDFHttpClient: NSObject {
         task.resume()
     }
     
-    public class func UploadFile2(urlString: String, parameter: [String : Any]? = nil, headers: [String : String]? = nil, filepath: String, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
-        let configuration: URLSessionConfiguration = URLSessionConfiguration.default
-        var sessionManager = AFHTTPSessionManager.init(sessionConfiguration: configuration)
-        sessionManager.securityPolicy = AFSecurityPolicy.default()
-        
-        if let _headers = headers {
-            for (key, value) in _headers {
-                sessionManager.requestSerializer.setValue(value, forHTTPHeaderField: key)
-            }
-        }
-        
-        sessionManager.requestSerializer.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-        sessionManager.requestSerializer.timeoutInterval = 60 * 3
-        sessionManager.responseSerializer = AFJSONResponseSerializer()
-        sessionManager.responseSerializer.acceptableContentTypes = ["application/json","text/html","text/json","text/javascript","text/plain","image/gif"]
-        
-        sessionManager.requestSerializer.setValue("Apifox/1.0.0 (https://www.apifox.cn)", forHTTPHeaderField: "User-Agent")
-
-        sessionManager.post(self.baseUrl+urlString, parameters: parameter) { formData in
-            let fileURL = URL(fileURLWithPath: filepath)
-            try? formData.appendPart(withFileURL: fileURL, name: "file", fileName: fileURL.lastPathComponent, mimeType: "application/octet-stream")
-        } progress: { progess in
-            
-        } success: { dataTask, data in
-            if let _result = data as? [String : Any], let code = _result["code"] as? String, code == "200" {
-                callback(true, _result["data"] as? [String : Any], nil)
-                return
-            }
-            callback(false, nil, nil)
-        } failure: { dataTask, error in
-            callback(false, nil, error)
-        };
-    }
-    
-    
     class func buildBodyData() -> Data {
         
 //        var bodyStr = "--" + boundary + "\r\n"
