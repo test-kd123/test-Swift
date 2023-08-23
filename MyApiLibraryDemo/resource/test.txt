@@ -1,0 +1,57 @@
+MacAddr:8C:85:90:CE:A1:57
+AppName	AppSign	
+
+Sourcetree.app	Atlassian Pty Ltd 
+Mattermost.app	Mattermost, Inc. 
+PDF Reader.app	AppStore
+Paragon VMDK Mounter.app	Paragon Software GmbH 
+TeamViewer.app	TeamViewer GmbH 
+Keka.app	Jorge Garcia Armero 
+TestFlight.app	AppStore
+PDF Reader Pro Lite.app	AppStore
+LogTransport.app	Adobe Inc. 
+Adobe Crash Reporter.app	Adobe Inc. 
+AdobeCRDaemon.app	Adobe Inc. 
+LogTransport.app	Adobe Inc. 
+AdobeCRDaemon.app	Adobe Inc. 
+Adobe Crash Reporter.app	Adobe Inc. 
+Adobe CEF Helper.app	Adobe Inc. 
+Adobe CEF Helper (GPU).app	Adobe Inc. 
+Adobe CEF Helper (Renderer).app	Adobe Inc. 
+Markdown Editor.app	AppStore
+OneDrive.app	Microsoft Corporation 
+Filmage Screen.app	AppStore
+Microsoft Word.app	Microsoft Corporation 
+TencentMeeting.app	AppStore
+Safari.app	系统软件
+Zeplin.app	Zeplin, Inc. 
+AdobeCleanUpUtility.app	Adobe Inc. 
+AdobeGCClient.app	Adobe Inc. 
+Creative Cloud Desktop App.app	Adobe Inc. 
+CC Troubleshooter.app	Adobe Inc. 
+Creative Cloud Uninstaller.app	Adobe Inc. 
+Creative Cloud Installer.app	Adobe Inc. 
+Creative Cloud Helper.app	Adobe Inc. 
+Creative Cloud.app	Adobe Inc. 
+CCXProcess.app	Adobe Systems, Inc. 
+ACCFinderBundleLoader.app	Adobe Inc. 
+Core Sync.app	Adobe Inc. 
+PDApp.app	其它渠道
+LogTransport2.app	Adobe Systems, Inc.
+AASIapp.app	Adobe Systems, Inc. 
+SF Symbols.app	AppStore
+PDF Expert Installer 3.0.app	Readdle Inc. 
+万兴PDF.app	AppStore
+Filmage Editor.app	AppStore
+WeChat.app	AppStore
+企业微信.app	Tencent Technology 
+Skype.app	Skype Communications S.a.r.l 
+Record It.app	AppStore
+SignFlow.app	AppStore
+亿图图示.app	AppStore
+Tencent Lemon.app	Tencent Technology 
+Acrobat Distiller.app	Adobe Inc. 
+Adobe Acrobat.app	Adobe Inc. 
+SF Symbols.app	系统软件
+QQ.app	AppStore
+Xcode.app	AppStore
