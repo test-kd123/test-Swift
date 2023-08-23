@@ -14,17 +14,22 @@ class PDFExtract: NSObject {
     
     class func entrance() {
         self.client.createTask(url: CPDFDocumentEditor.EXTRACT) { taskId, param in
+            guard let _taskId = taskId else {
+                Swift.debugPrint("创建 Task 失败")
+                return
+            }
+            
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
             self.client.uploadFile(filepath: path!, params: [
                 CPDFFileUploadParameterKey.pageOptions.string() : ["2"],
-            ], taskId: taskId) { filekey, fileUrl in
+            ], taskId: _taskId) { filekey, fileUrl, _ in
                 group.leave()
             }
             
             group.notify(queue: .main) {
-                self.client.resumeTask(taskId: taskId) { isFinish, downloadUrl, params in
+                self.client.resumeTask(taskId: _taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             }

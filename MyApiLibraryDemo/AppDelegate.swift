@@ -13,10 +13,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-//        PDFDelete.entrance()
+        PDFDelete.entrance()
 //        PDFMerge.entrance()
 //        PDFSplit.entrance()
-        PDFRotation.entrance()
+//        PDFRotation.entrance()
 //        PDFInsert.entrance()
 //        PDFExtract.entrance()
 //        PDFToWord.entrance()

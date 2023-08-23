@@ -14,6 +14,11 @@ class PDFToExcel: NSObject {
     
     class func entrance() {
         self.client.createTask(url: CPDFConversion.PDF_TO_EXCEL) { taskId, param in
+            guard let _taskId = taskId else {
+                Swift.debugPrint("创建 Task 失败")
+                return
+            }
+            
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
@@ -22,12 +27,12 @@ class PDFToExcel: NSObject {
                 CPDFFileUploadParameterKey.worksheetOptions.string() : "1",
                 CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
                 CPDFFileUploadParameterKey.isContainImg.string() : "1"
-            ], taskId: taskId) { filekey, fileUrl in
+            ], taskId: _taskId) { filekey, fileUrl, _ in
                 group.leave()
             }
             
             group.notify(queue: .main) {
-                self.client.resumeTask(taskId: taskId) { isFinish, downloadUrl, params in
+                self.client.resumeTask(taskId: _taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             }

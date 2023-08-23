@@ -14,15 +14,20 @@ class PNGToPDF: NSObject {
     
     class func entrance() {
         self.client.createTask(url: CPDFConversion.PNG_TO_PDF) { taskId, param in
+            guard let _taskId = taskId else {
+                Swift.debugPrint("创建 Task 失败")
+                return
+            }
+            
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "png")
-            self.client.uploadFile(filepath: path!, params: [:], taskId: taskId) { filekey, fileUrl in
+            self.client.uploadFile(filepath: path!, params: [:], taskId: _taskId) { filekey, fileUrl, _ in
                 group.leave()
             }
             
             group.notify(queue: .main) {
-                self.client.resumeTask(taskId: taskId) { isFinish, downloadUrl, params in
+                self.client.resumeTask(taskId: _taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             }
