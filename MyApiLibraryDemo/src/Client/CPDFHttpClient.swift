@@ -9,6 +9,7 @@ import Cocoa
 
 class CPDFHttpClient: NSObject {
     private static let baseUrl = "https://api-server.compdf.com/server/"
+    private static let boundary = "CPDFBoundary"
     
     public class func GET(urlString: String, parameter: [String : String]? = nil, headers: [String : String]? = nil, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
         var _urlString = "\(self.baseUrl)"+urlString
@@ -36,13 +37,7 @@ class CPDFHttpClient: NSObject {
             }
         }
         request.timeoutInterval = 60.0
-        
         session.configuration.timeoutIntervalForRequest = 30.0
-        
-//        if let data = parameter {
-//            let body = try?JSONSerialization.data(withJSONObject: data, options: [])
-//            request.httpBody = body
-//        }
         
         let task: URLSessionDataTask = session.dataTask(with: request) { data , response, error in
             DispatchQueue.main.async {
@@ -106,7 +101,7 @@ class CPDFHttpClient: NSObject {
         
     }
     
-    public class func UploadFile(urlString: String, parameter: [String : String]? = nil, headers: [String : String]? = nil) {
+    public class func UploadFile(urlString: String, parameter: [String : Any]? = nil, headers: [String : String]? = nil, filepath: String, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
         let url = URL(string: self.baseUrl + urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
@@ -116,48 +111,60 @@ class CPDFHttpClient: NSObject {
             }
         }
         
-        // boundary=\"\"
-        let contentType = "multipart/form-data; charset=utf-8;"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("multipart/form-data; boundary=\(self.boundary)", forHTTPHeaderField: "Content-Type")
         
-        var mdata = Data()
-        mdata.append("--\r\n".data(using: .utf8)!)
-        var string = ""
-        string.append("--\r\n")
+        var bodyString = ""
         if let data = parameter {
             for (key,value) in data {
-                mdata.append("Content-disposition: form-data; name=\"\(key)\"\r\n\r\n\(value)\r\n".data(using: .utf8)!)
-                string.append("Content-disposition: form-data; name=\"\(key)\"\r\n\r\n\(value)\r\n")
-                mdata.append("--\r\n".data(using: .utf8)!)
-                string.append("--\r\n")
+                bodyString.append("--\(self.boundary)\r\n")
+                if (value is String) {
+                    bodyString.append("Content-disposition: form-data; name=\"\(key)\"")
+                    bodyString.append("\r\n\r\n")
+                    bodyString.append(value as! String)
+                    bodyString.append("\r\n")
+                } else {
+                    // no things
+                }
             }
         }
         
-        mdata.append("Content-disposition: form-data; name=\"file\"; filename=\"test.pdf\"".data(using: .utf8)!)
-        string.append("Content-disposition: form-data; name=\"file\"; filename=\"test.pdf\"")
-        mdata.append("\r\n".data(using: .utf8)!)
-        string.append("\r\n")
-//        mdata.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
-        mdata.append("Content-Type: application/octet-stream\r\n\r\n".data(using: .utf8)!)
+        let fileUrl = URL(fileURLWithPath: filepath)
+        bodyString.append("--\(self.boundary)\r\n")
+//        filepath.comp
+        bodyString.append("Content-disposition: form-data; name=\"file\"; filename=\"\(fileUrl.lastPathComponent)\"")
+        bodyString.append("\r\n")
+        bodyString.append("Content-Type: application/octet-stream")
+        bodyString.append("\r\n\r\n")
         
-        string.append("Content-Type: image/png\r\n\r\n")
+        var mdata = Data()
+        mdata.append(bodyString.data(using: .utf8)!)
+//        let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+        let data = try?Data(contentsOf: fileUrl)
+        mdata.append(data!)
+        mdata.append("\r\n".data(using: .utf8)!)
+        mdata.append("--\(self.boundary)--".data(using: .utf8)!)
         
         let session = URLSession.shared
-        let path = Bundle.main.path(forResource: "提取表格-常规1", ofType: "pdf")
-        let data = try?Data(contentsOf: URL(fileURLWithPath: path!))
-        mdata.append(data!)
-        mdata.append("\r\n--\r\n".data(using: .utf8)!)
+        request.timeoutInterval = 60*3
 
-//        request.httpBody = mdata
-//        let task = session.uploadTask(with: request, from: data) { data, reponse , error in
-//            let string = String(data: data!, encoding: .utf8)
-//            Swift.debugPrint("")
-//        }
-//        task.resume()
         request.httpBody = mdata
         let task = session.dataTask(with: request) {data , response, error in
-            let string = String(data: data!, encoding: .utf8)
-            Swift.debugPrint("")
+            DispatchQueue.main.async {
+                if let _ = error {
+                    callback(false, nil, error)
+                    return
+                }
+                guard let _data = data else {
+                    callback(false, nil, error)
+                    return
+                }
+                let result = self.JsonDataParse(data: _data)
+                if let _result = result, let code = _result["code"] as? String, code == "200" {
+                    callback(true, _result["data"] as? [String : Any], nil)
+                    return
+                }
+                callback(false, nil, error)
+            }
         }
         task.resume()
     }

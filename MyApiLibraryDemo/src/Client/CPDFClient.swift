@@ -133,7 +133,10 @@ class CPDFClient: NSObject {
         let data = try?Data(contentsOf: URL(fileURLWithPath: filepath))
         parameter["file"] =  data
         
-        CPDFHttpClient.UploadFile2(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result , dataDict , error in
+//        CPDFHttpClient.UploadFile2(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result , dataDict , error in
+//            callback(dataDict?["fileKey"] as? String, dataDict?["fileUrl"] as? String, error.debugDescription)
+//        }
+        CPDFHttpClient.UploadFile(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result, dataDict, error in
             callback(dataDict?["fileKey"] as? String, dataDict?["fileUrl"] as? String, error.debugDescription)
         }
     }

@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-        PDFDelete.entrance()
+//        PDFDelete.entrance()
 //        PDFMerge.entrance()
 //        PDFSplit.entrance()
 //        PDFRotation.entrance()
@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        HTMLToPDF.entrance()
 //        RTFToPDF.entrance()
 //        CSVToPDF.entrance()
-//        OCR.entrance()
+        OCR.entrance()
 //        LayoutAnalysis.entrance()
 //        ImageSharpeningEnhancement.entrance()
 //        FormRecognizer.entrance()
