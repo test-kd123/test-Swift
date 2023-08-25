@@ -67,6 +67,7 @@
 		BBAC8C122A98807700DB33A2 /* test_html.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C112A98807700DB33A2 /* test_html.jpg */; };
 		BBAC8C142A98832500DB33A2 /* IMG_00001(2).pdf in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C132A98832500DB33A2 /* IMG_00001(2).pdf */; };
 		BBAC8C162A98848500DB33A2 /* IMG_00001(2).jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C152A98848500DB33A2 /* IMG_00001(2).jpg */; };
+		BBAC8C182A988A0B00DB33A2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C172A988A0B00DB33A2 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +133,7 @@
 		BBAC8C112A98807700DB33A2 /* test_html.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test_html.jpg; sourceTree = "<group>"; };
 		BBAC8C132A98832500DB33A2 /* IMG_00001(2).pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "IMG_00001(2).pdf"; sourceTree = "<group>"; };
 		BBAC8C152A98848500DB33A2 /* IMG_00001(2).jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "IMG_00001(2).jpg"; sourceTree = "<group>"; };
+		BBAC8C172A988A0B00DB33A2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		BBDA10BC2A8F687D0046A07C /* MyApiLibraryDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyApiLibraryDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 		BB414F1C2A8DF41700D30617 /* MyApiLibraryDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BBAC8C172A988A0B00DB33A2 /* README.md */,
 				BBDA107E2A8F47AF0046A07C /* resource */,
 				BB414F3E2A8DFAEC00D30617 /* samples */,
 				BB414F2C2A8DF9F500D30617 /* src */,
@@ -359,6 +362,7 @@
 				BB2E88A22A93871400BF5DC7 /* test.png in Resources */,
 				BB600F172A9443C300026A2D /* test.jpg in Resources */,
 				BBAC8C122A98807700DB33A2 /* test_html.jpg in Resources */,
+				BBAC8C182A988A0B00DB33A2 /* README.md in Resources */,
 				BB600F2F2A9467E400026A2D /* test.pptx in Resources */,
 				BB600F452A94B55900026A2D /* test.docx in Resources */,
 				BBAC8C142A98832500DB33A2 /* IMG_00001(2).pdf in Resources */,

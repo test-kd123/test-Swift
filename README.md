@@ -6,9 +6,9 @@
 
 ## Requirements
 
-Programming Environment: Java JDK 1.8 and higher.
+Programming Environment: iOS/MacOS.
 
-Dependencies: Maven.
+Dependencies: Xcode.
 
 
 
@@ -34,8 +34,8 @@ You can use your **publicKey** and **secretKey** to complete the authentication.
 
 - Project secret Key : You can find the secret Key in [Management Panel](https://api-dashboard.compdf.com/api/keys).
 
-```java
-CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
+```Swift
+var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 ```
 
 
@@ -44,16 +44,19 @@ CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
 
 A task ID is automatically generated for you based on the type of PDF tool you choose. You can provide the callback notification URL. After the task processing is completed, we will notify you of the task result through the callback interface. You can perform other operations according to the request result, such as checking the status of the task, uploading files, starting the task, or downloading the result file.
 
-```java
+```Swift
 // Create a client
-CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
+var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 // Create an example of a PDF TO WORD task
-CPDFCreateTaskResult result = client.createTask(CPDFConversionEnum.PDF_TO_WORD.getValue());
-
+client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
-String taskId = result.getTaskId();
+    guard let _taskId = taskId else {
+        Swift.debugPrint("创建 Task 失败")
+        return
+    }
+}
 ```
 
 
@@ -62,70 +65,89 @@ String taskId = result.getTaskId();
 
 Upload the original file and bind the file to the task ID. The field parameter is used to pass the JSON string to set the processing parameters for the file. Each file will generate automatically a unique filekey. Please note that a maximum of five files can be uploaded for a task ID and no files can be uploaded for that task after it has started.
 
-```java
+```Swift
 // Create a client
-CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
+var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 // Create an example of a PDF TO WORD task
-CPDFCreateTaskResult result = client.createTask(CPDFConversionEnum.PDF_TO_WORD.getValue());
-
+self.client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
-String taskId = result.getTaskId();
-
+    guard let _taskId = taskId else {
+        Swift.debugPrint("创建 Task 失败")
+        return
+    }
+            
+    let group = DispatchGroup()
+    group.enter()
+    let path = Bundle.main.path(forResource: "test", ofType: "pdf")
 // Upload files
-client.uploadFile(<convertFile>, taskId);
+    client.uploadFile(filepath: path!, params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: _taskId) { filekey, fileUrl, _ in
+        group.leave()
+    }
+            
+    group.notify(queue: .main) {
+                
+    }
+}
 ```
 
 
 
-## Execute the task
+## Execute the task & Get Task Info
 
 After the file upload is completed, call this interface with the task ID to process the files.
 
-```java
+```Swift
 // Create a client
-CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
+var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 // Create an example of a PDF TO WORD task
-CPDFCreateTaskResult result = client.createTask(CPDFConversionEnum.PDF_TO_WORD.getValue());
-
+client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
-String taskId = result.getTaskId();
-
+    guard let _taskId = taskId else {
+        Swift.debugPrint("创建 Task 失败")
+        return
+    }
+            
 // Upload files
-client.uploadFile(<convertFile>, taskId);
-
-// execute Task
-client.executeTask(taskId);
-```
-
-
-
-## Get Task Info
-
-Request task status and file-related meta data based on the task ID.
-
-```java
-// Create a client
-CPDFClient client = new CPDFClient(<publicKey>, <secretKey>);
-
-// Create a task
-// Create an example of a PDF TO WORD task
-CPDFCreateTaskResult result = client.createTask(CPDFConversionEnum.PDF_TO_WORD.getValue());
-
-// Get a task id
-String taskId = result.getTaskId();
-
-// Upload files
-client.uploadFile(<convertFile>, taskId);
-
-// Execute Task
-client.executeTask(taskId);
-
-// Query TaskInfo
-CPDFTaskInfoResult taskInfo = client.getTaskInfo(taskId);
+    let group = DispatchGroup()
+    group.enter()
+    let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+    client.uploadFile(filepath: path!, params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: _taskId) { filekey, fileUrl, _ in
+        group.leave()
+    }
+            
+    group.notify(queue: .main) {
+// Execute Task & Query TaskInfo
+        client.resumeTask(taskId: _taskId) { isFinish, params in
+            var success = true
+            var downloadUrl: String?
+            if let datas = params.first as? [[String : Any]] {
+                for data in datas {
+                    let result = CPDFResultFileInfo(dict: data)
+                    if (result.status == "failed") {
+                        success = false
+                        Swift.debugPrint("失败：fileName: \(result.fileName ?? ""), reason: \(result.failureReason ?? "")")
+                    }
+                    downloadUrl = result.downloadUrl
+                }
+            }
+            if (success && downloadUrl != nil) {
+                Swift.debugPrint("处理完成. downloadUrl: \(downloadUrl!)")
+            }
+        }
+    }
+}
 ```
 
 
