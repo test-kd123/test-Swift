@@ -51,6 +51,29 @@ enum CPDFFileUploadParameterKey: String {
     }
 }
 
+extension CPDFClient.Parameter {
+    static let publicKey        = "publicKey"
+    static let secretKey        = "secretKey"
+    
+    static let taskId           = "taskId"
+    static let password         = "password"
+    static let parameter        = "parameter"
+    static let file             = "file"
+}
+
+extension CPDFClient.Data {
+    static let accessToken      = "accessToken"
+    static let expiresIn        = "expiresIn"
+    
+    static let taskId           = "taskId"
+    
+    static let fileKey          = "fileKey"
+    static let fileUrl          = "fileUrl"
+    
+    static let taskStatus       = "taskStatus"
+    static let fileInfoDTOList  = "fileInfoDTOList"
+}
+
 class CPDFClient: NSObject {
     private var _publicKey: String?
     var publicKey: String? {
@@ -67,6 +90,14 @@ class CPDFClient: NSObject {
     
     private var accessToken: String?
     private var expireTime: TimeInterval?
+    
+    struct Parameter {
+
+    }
+    
+    struct Data {
+        
+    }
     
     convenience init(publicKey: String, secretKey: String) {
         self.init()
@@ -89,18 +120,18 @@ class CPDFClient: NSObject {
         }
         
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_CREATE_TASK+url, headers: self.getRequestHeaderInfo()) { result, dataDict, error in
-            callback(dataDict!["taskId"] as? String, error.debugDescription)
+            callback(dataDict?[CPDFClient.Data.taskId] as? String, error.debugDescription)
         }
     }
     
     public func auth(callback:@escaping ((String?)->Void)) {
-        let options = ["publicKey" : self.publicKey ?? "", "secretKey": self.secretKey ?? ""]
+        let options = [CPDFClient.Parameter.publicKey : self.publicKey ?? "", CPDFClient.Parameter.secretKey: self.secretKey ?? ""]
         CPDFHttpClient.POST(urlString: CPDFURL.API_V1_OAUTH_TOKEN, parameter: options) { [weak self] result, dataDict, error in
-            self?.accessToken = dataDict?["accessToken"] as? String
-            if let expiresIn = dataDict?["expiresIn"] as? String, let data = Float(expiresIn) {
+            self?.accessToken = dataDict?[CPDFClient.Data.accessToken] as? String
+            if let expiresIn = dataDict?[CPDFClient.Data.expiresIn] as? String, let data = Float(expiresIn) {
                 self?.expireTime = Date().timeIntervalSince1970*1000+Double(data)
             }
-            callback(dataDict?["accessToken"] as? String)
+            callback(dataDict?[CPDFClient.Data.accessToken] as? String)
         }
     }
     
@@ -118,26 +149,21 @@ class CPDFClient: NSObject {
         }
         
         var parameter: [String : Any] = [:]
-        parameter["taskId"] = taskId
+        parameter[CPDFClient.Parameter.taskId] = taskId
         if let data = password {
-            parameter["password"] = data
+            parameter[CPDFClient.Parameter.password] = data
         }
         
-//        let dict = ["pageOptions" : ["1"], "rotation" : "90"] as [String : Any]
         if let data = try?JSONSerialization.data(withJSONObject: params, options: .fragmentsAllowed) {
             let jsonString = String(data: data, encoding: .utf8)
-            parameter["parameter"] = jsonString
+            parameter[CPDFClient.Parameter.parameter] = jsonString
         }
-//        parameter["parameter"] = "{\"pageOptions\": \"['1']\"}"
         
-        let data = try?Data(contentsOf: URL(fileURLWithPath: filepath))
-        parameter["file"] =  data
+//        let data = try?Data(contentsOf: URL(fileURLWithPath: filepath))
+//        parameter["file"] =  data
         
-//        CPDFHttpClient.UploadFile2(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result , dataDict , error in
-//            callback(dataDict?["fileKey"] as? String, dataDict?["fileUrl"] as? String, error.debugDescription)
-//        }
         CPDFHttpClient.UploadFile(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result, dataDict, error in
-            callback(dataDict?["fileKey"] as? String, dataDict?["fileUrl"] as? String, error.debugDescription)
+            callback(dataDict?[CPDFClient.Data.fileKey] as? String, dataDict?[CPDFClient.Data.fileUrl] as? String, error.debugDescription)
         }
     }
     
@@ -175,7 +201,7 @@ class CPDFClient: NSObject {
         }
         
         var parameter: [String : String] = [:]
-        parameter["taskId"] = taskId
+        parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_EXECUTE_TASK, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             callback(result)
         }
@@ -194,17 +220,17 @@ class CPDFClient: NSObject {
         }
         
         var parameter: [String : String] = [:]
-        parameter["taskId"] = taskId
+        parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
-            if let data = dataDict?["taskStatus"] as? String, data.elementsEqual("TaskProcessing") {
+            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskProcessing") {
                 self.getTaskInfo(taskId: taskId, callback: callback)
                 return
             }
             var isFinish = false
-            if let data = dataDict?["taskStatus"] as? String, data.elementsEqual("TaskFinish") {
+            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskFinish") {
                 isFinish = true
             }
-            callback(isFinish, dataDict?["fileInfoDTOList"] as Any)
+            callback(isFinish, dataDict?[CPDFClient.Data.fileInfoDTOList] as Any)
         }
     }
     

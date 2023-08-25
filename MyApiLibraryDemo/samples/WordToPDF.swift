@@ -28,7 +28,22 @@ class WordToPDF: NSObject {
             
             group.notify(queue: .main) {
                 self.client.resumeTask(taskId: _taskId) { isFinish, params in
-                    Swift.debugPrint(params)
+//                    Swift.debugPrint(params)
+                    var success = true
+                    var downloadUrl: String?
+                    if let datas = params.first as? [[String : Any]] {
+                        for data in datas {
+                            let result = CPDFResultFileInfo(dict: data)
+                            if (result.status == "failed") {
+                                success = false
+                                Swift.debugPrint("失败：fileName: \(result.fileName ?? ""), reason: \(result.failureReason ?? "")")
+                            }
+                            downloadUrl = result.downloadUrl
+                        }
+                    }
+                    if (success && downloadUrl != nil) {
+                        Swift.debugPrint("处理完成. downloadUrl: \(downloadUrl!)")
+                    }
                 }
             }
         }

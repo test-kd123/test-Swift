@@ -45,7 +45,6 @@ class CPDFHttpClient: NSObject {
                     callback(false, nil, error)
                     return
                 }
-                // let string = String(data: _data, encoding: .utf8)
                 guard let _data = data else {
                     callback(false, nil, error)
                     return
@@ -84,7 +83,6 @@ class CPDFHttpClient: NSObject {
                     callback(false, nil, error)
                     return
                 }
-                // let string = String(data: _data, encoding: .utf8)
                 guard let _data = data else {
                     callback(false, nil, error)
                     return
@@ -130,7 +128,6 @@ class CPDFHttpClient: NSObject {
         
         let fileUrl = URL(fileURLWithPath: filepath)
         bodyString.append("--\(self.boundary)\r\n")
-//        filepath.comp
         bodyString.append("Content-disposition: form-data; name=\"file\"; filename=\"\(fileUrl.lastPathComponent)\"")
         bodyString.append("\r\n")
         bodyString.append("Content-Type: application/octet-stream")
@@ -138,14 +135,15 @@ class CPDFHttpClient: NSObject {
         
         var mdata = Data()
         mdata.append(bodyString.data(using: .utf8)!)
-//        let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-        let data = try?Data(contentsOf: fileUrl)
-        mdata.append(data!)
+        if let data = try?Data(contentsOf: fileUrl) {
+            mdata.append(data)
+        }
+        
         mdata.append("\r\n".data(using: .utf8)!)
         mdata.append("--\(self.boundary)--".data(using: .utf8)!)
         
         let session = URLSession.shared
-        request.timeoutInterval = 60*3
+        request.timeoutInterval = 90
 
         request.httpBody = mdata
         let task = session.dataTask(with: request) {data , response, error in
@@ -167,26 +165,6 @@ class CPDFHttpClient: NSObject {
             }
         }
         task.resume()
-    }
-    
-    class func buildBodyData() -> Data {
-        
-//        var bodyStr = "--" + boundary + "\r\n"
-        var bodyStr = ""
-        bodyStr.append("Content-disposition: form-data; name=\"file\"; filename=\"test.pdf\"")
-        bodyStr.append("\r\n")
-//        bodyStr.append("Content-Type: image/png")
-        bodyStr.append("\r\n\r\n")
-        var bodyData = bodyStr.data(using: String.Encoding.utf8)
-        let path = Bundle.main.path(forResource: "提取表格-常规1", ofType: "pdf")
-        if let imageData = try? Data(contentsOf: URL(fileURLWithPath: path!)) {
-            bodyData?.append(imageData)
-        }
-//        let endStr = "\r\n--" + boundary + "--\r\n"
-        let endStr = ""
-        bodyData?.append(endStr.data(using: String.Encoding.utf8)!)
-        
-        return bodyData!
     }
     
     private class func JsonDataParse(data: Data) -> Dictionary<String,Any>? {
