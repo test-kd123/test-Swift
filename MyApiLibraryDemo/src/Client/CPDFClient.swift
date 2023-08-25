@@ -188,7 +188,7 @@ class CPDFClient: NSObject {
         }
     }
     
-    private func processFiles(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func processFiles(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] accessToken in
                 guard let _ = accessToken else {
@@ -207,7 +207,7 @@ class CPDFClient: NSObject {
         }
     }
     
-    private func getTaskInfo(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func getTaskInfoComplete(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] accessToken in
                 guard let _ = accessToken else {
@@ -223,7 +223,7 @@ class CPDFClient: NSObject {
         parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskProcessing") {
-                self.getTaskInfo(taskId: taskId, callback: callback)
+                self.getTaskInfoComplete(taskId: taskId, callback: callback)
                 return
             }
             var isFinish = false
@@ -231,6 +231,34 @@ class CPDFClient: NSObject {
                 isFinish = true
             }
             callback(isFinish, dataDict?[CPDFClient.Data.fileInfoDTOList] as Any)
+        }
+    }
+    
+    public func getTaskInfo(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+        if (!self.accessTokenIsValid()) {
+            self.auth { [weak self] accessToken in
+                guard let _ = accessToken else {
+                    callback(false, "auth failure")
+                    return
+                }
+                self?.getTaskInfo(taskId: taskId, callback: callback)
+            }
+            return
+        }
+        
+        var parameter: [String : String] = [:]
+        parameter[CPDFClient.Parameter.taskId] = taskId
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
+//            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskProcessing") {
+//                self.getTaskInfo(taskId: taskId, callback: callback)
+//                return
+//            }
+//            var isFinish = false
+//            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskFinish") {
+//                isFinish = true
+//            }
+//            callback(isFinish, dataDict?[CPDFClient.Data.fileInfoDTOList] as Any)
+            callback(result, dataDict as Any, error as Any)
         }
     }
     

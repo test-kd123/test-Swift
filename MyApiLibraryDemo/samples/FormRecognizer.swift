@@ -27,6 +27,21 @@ class FormRecognizer: NSObject {
             }
             
             group.notify(queue: .main) {
+//                self.client.processFiles(taskId: _taskId) { _ , _ in
+//                    self.client.getTaskInfo(taskId: _taskId) { result, params in
+//                        if let dataDict = params.first as? [String : Any] {
+//                            if let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String, taskStatus == "TaskFinish" {
+//                                Swift.debugPrint(dataDict)
+//                            } else {
+//                                Swift.debugPrint("Task incomplete processing")
+//                                // 获取处理结果 可以通过下面的方式
+//                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
+//                                    Swift.debugPrint(params)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
                 self.client.resumeTask(taskId: _taskId) { isFinish, params in
 //                    Swift.debugPrint(params)
                     var success = true

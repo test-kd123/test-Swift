@@ -28,22 +28,19 @@ class PDFDelete: NSObject {
             }
             
             group.notify(queue: .main) {
-                self.client.resumeTask(taskId: _taskId) { isFinish, params in
-//                    Swift.debugPrint(params)
-                    var success = true
-                    var downloadUrl: String?
-                    if let datas = params.first as? [[String : Any]] {
-                        for data in datas {
-                            let result = CPDFResultFileInfo(dict: data)
-                            if (result.status == "failed") {
-                                success = false
-                                Swift.debugPrint("失败：fileName: \(result.fileName ?? ""), reason: \(result.failureReason ?? "")")
+                self.client.processFiles(taskId: _taskId) { _ , _ in
+                    self.client.getTaskInfo(taskId: _taskId) { result, params in
+                        if let dataDict = params.first as? [String : Any] {
+                            if let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String, taskStatus == "TaskFinish" {
+                                Swift.debugPrint(dataDict)
+                            } else {
+                                Swift.debugPrint("Task incomplete processing")
+                                // 获取处理结果 可以通过下面的方式
+//                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
+//                                    Swift.debugPrint(params)
+//                                }
                             }
-                            downloadUrl = result.downloadUrl
                         }
-                    }
-                    if (success && downloadUrl != nil) {
-                        Swift.debugPrint("处理完成. downloadUrl: \(downloadUrl!)")
                     }
                 }
             }

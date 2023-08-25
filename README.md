@@ -71,7 +71,7 @@ var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 
 // Create a task
 // Create an example of a PDF TO WORD task
-self.client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
+client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
     guard let _taskId = taskId else {
         Swift.debugPrint("创建 Task 失败")

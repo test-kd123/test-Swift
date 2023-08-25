@@ -39,12 +39,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        OCR.entrance()
 //        LayoutAnalysis.entrance()
 //        ImageSharpeningEnhancement.entrance()
-        FormRecognizer.entrance()
+//        FormRecognizer.entrance()
 //        TrimCorrection.entrance()
 //        StampInspection.entrance()
 //        AddWatermark.entrance()
 //        DeleteWatermark.entrance()
-//        PDFCompression.entrance()
+        PDFCompression.entrance()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
