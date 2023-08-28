@@ -13,11 +13,13 @@ class PDFSplit: NSObject {
     private static var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
     
     class func entrance() {
+        //Create a task
         self.client.createTask(url: CPDFDocumentEditor.SPLIT) { taskId, param in
             guard let _taskId = taskId else {
                 return
             }
             
+            // upload File
             let group = DispatchGroup()
             group.enter()
 //            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
@@ -27,16 +29,21 @@ class PDFSplit: NSObject {
             }
             
             group.notify(queue: .main) {
+                // execute Task
                 self.client.processFiles(taskId: _taskId) { _ , _ in
+                    // get task processing information
                     self.client.getTaskInfo(taskId: _taskId) { result, params in
                         if let dataDict = params.first as? [String : Any] {
-                            if let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String, taskStatus == "TaskFinish" {
+                            let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String ?? ""
+                            if (taskStatus == "TaskFinish") {
                                 Swift.debugPrint(dataDict)
-                            } else {
+                            } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
                                 Swift.debugPrint("Task incomplete processing")
 //                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
 //                                    Swift.debugPrint(params)
 //                                }
+                            } else {
+                                Swift.debugPrint("error: \(dataDict)")
                             }
                         }
                     }
@@ -55,7 +62,7 @@ class PDFSplit: NSObject {
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
             let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1-2"]], taskId: taskId)
             
-            //execute Task
+            // execute Task
             let success = await self.client.processFiles(taskId: taskId)
             // get task processing information
             let dataDict = await self.client.getTaskInfo(taskId: taskId)
