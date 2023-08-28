@@ -124,6 +124,7 @@ class CPDFClient: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     public func createTask(url: String) async -> String? {
         return await withCheckedContinuation({ continuation in
             self.createTask(url: url) { taskId, _ in
@@ -143,6 +144,7 @@ class CPDFClient: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     public func auth() async -> String? {
         return await withCheckedContinuation({ continuation in
             self.auth { accessToken in
@@ -183,6 +185,7 @@ class CPDFClient: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String) async ->(String?, String?, String?) {
         return await withCheckedContinuation({ continuation in
             self.uploadFile(filepath: filepath, password: password, params: params, taskId: taskId) { param1, param2, param3 in
@@ -231,6 +234,7 @@ class CPDFClient: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     public func processFiles(taskId: String) async -> Bool {
         return await withCheckedContinuation({ continuation in
             self.processFiles(taskId: taskId) { isFinish, params in
@@ -294,6 +298,7 @@ class CPDFClient: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     public func getTaskInfo(taskId: String) async -> [String : Any]? {
         return await withCheckedContinuation({ continuation in
             self.getTaskInfo(taskId: taskId) { isFinish, params in

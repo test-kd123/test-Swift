@@ -51,6 +51,7 @@ class PDFToHTML: NSObject {
         }
     }
     
+    @available(macOS 10.15.0, iOS 13.0, *)
     class func asyncEntrance() {
         Task { @MainActor in
             // Create a task

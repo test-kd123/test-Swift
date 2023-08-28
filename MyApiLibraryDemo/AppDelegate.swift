@@ -77,7 +77,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()
 //        DeleteWatermark.asyncEntrance()
-        PDFCompression.asyncEntrance()
+        if #available(macOS 10.15, iOS 13.0, *) {
+            PDFCompression.asyncEntrance()
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
