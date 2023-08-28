@@ -143,7 +143,7 @@ class CPDFHttpClient: NSObject {
         mdata.append("--\(self.boundary)--".data(using: .utf8)!)
         
         let session = URLSession.shared
-        request.timeoutInterval = 90
+//        request.timeoutInterval = 120
 
         request.httpBody = mdata
         let task = session.dataTask(with: request) {data , response, error in

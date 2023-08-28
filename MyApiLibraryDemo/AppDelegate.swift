@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if #available(macOS 10.15, iOS 13.0, *) {
 //            PDFDelete.asyncEntrance()
 //            PDFMerge.asyncEntrance()
-            PDFSplit.asyncEntrance()
+//            PDFSplit.asyncEntrance()
 //        PDFRotation.asyncEntrance()
 //        PDFInsert.asyncEntrance()
 //        PDFExtract.asyncEntrance()
@@ -62,7 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        PDFToRTF.asyncEntrance()
 //        PDFToJPG.asyncEntrance()
 //        PDFToPNG.asyncEntrance()
-//        WordToPDF.asyncEntrance()
+        WordToPDF.asyncEntrance()
 //        ExcelToPDF.asyncEntrance()
 //        PPTToPDF.asyncEntrance()
 //        PNGToPDF.asyncEntrance()

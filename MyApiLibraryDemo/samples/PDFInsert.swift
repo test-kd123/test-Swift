@@ -15,7 +15,6 @@ class PDFInsert: NSObject {
     class func entrance() {
         self.client.createTask(url: CPDFDocumentEditor.INSERT) { taskId, param in
             guard let _taskId = taskId else {
-                Swift.debugPrint("创建 Task 失败")
                 return
             }
             
@@ -40,7 +39,6 @@ class PDFInsert: NSObject {
                                 Swift.debugPrint(dataDict)
                             } else {
                                 Swift.debugPrint("Task incomplete processing")
-                                // 获取处理结果 可以通过下面的方式
                                 self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
                                     Swift.debugPrint(params)
                                 }
@@ -76,12 +74,11 @@ class PDFInsert: NSObject {
                 Swift.debugPrint(dataDict as Any)
             } else if (taskStatus == "TaskProcessing") {
                 Swift.debugPrint("Task incomplete processing")
-                // 获取处理结果 可以通过下面的方式
                 self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             } else {
-                Swift.debugPrint("出错了")
+                Swift.debugPrint("error")
             }
         }
     }
