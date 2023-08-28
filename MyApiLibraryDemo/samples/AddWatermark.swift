@@ -64,10 +64,12 @@ class AddWatermark: NSObject {
     
     class func asyncEntrance() {
         Task { @MainActor in
-            let taskId = await self.client.createTask(url: CPDFDocumentEditor.ADD_WATERMARK)
-//
+            // Create a task
+            let taskId = await self.client.createTask(url: CPDFDocumentEditor.ADD_WATERMARK) ?? ""
+
+            // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let _ = await self.client.uploadFile(filepath: path ?? "", params: [
+            _ = await self.client.uploadFile(filepath: path ?? "", params: [
                 CPDFFileUploadParameterKey.textColor.string():"#59c5bb",
                 CPDFFileUploadParameterKey.type.string():"text",
                 CPDFFileUploadParameterKey.content.string():"text",
@@ -82,16 +84,18 @@ class AddWatermark: NSObject {
                 CPDFFileUploadParameterKey.fullScreen.string():"1",
                 CPDFFileUploadParameterKey.horizontalSpace.string():"10",
                 CPDFFileUploadParameterKey.verticalSpace.string():"10"
-            ], taskId: taskId ?? "")
+            ], taskId: taskId)
             
-            let _ = await self.client.processFiles(taskId: taskId ?? "")
-            let dataDict = await self.client.getTaskInfo(taskId: taskId ?? "")
+            // execute Task
+            _ = await self.client.processFiles(taskId: taskId)
+            // get task processing information
+            let dataDict = await self.client.getTaskInfo(taskId: taskId)
             if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskFinish" {
                 Swift.debugPrint(dataDict as Any)
             } else if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskProcessing" {
                 Swift.debugPrint("Task incomplete processing")
                 // 获取处理结果 可以通过下面的方式
-                self.client.getTaskInfoComplete(taskId: taskId ?? "") { isFinish, params in
+                self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             } else {
