@@ -46,9 +46,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        DeleteWatermark.entrance()
 //        PDFCompression.entrance()
         
-//        PDFDelete.asyncEntrance()
-//        PDFMerge.asyncEntrance()
-//        PDFSplit.asyncEntrance()
+        if #available(macOS 10.15, iOS 13.0, *) {
+//            PDFDelete.asyncEntrance()
+//            PDFMerge.asyncEntrance()
+            PDFSplit.asyncEntrance()
 //        PDFRotation.asyncEntrance()
 //        PDFInsert.asyncEntrance()
 //        PDFExtract.asyncEntrance()
@@ -77,8 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()
 //        DeleteWatermark.asyncEntrance()
-        if #available(macOS 10.15, iOS 13.0, *) {
-            PDFCompression.asyncEntrance()
+//            PDFCompression.asyncEntrance()
         } else {
             // Fallback on earlier versions
         }

@@ -53,7 +53,7 @@ class PDFDelete: NSObject {
         Task { @MainActor in
             //Create a task
             let taskId: String = await self.client.createTask(url: CPDFDocumentEditor.DELETE) ?? ""
-//
+
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
             _ = await self.client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1"]], taskId: taskId)
@@ -62,9 +62,10 @@ class PDFDelete: NSObject {
             _ = await self.client.processFiles(taskId: taskId)
             // get task processing information
             let dataDict = await self.client.getTaskInfo(taskId: taskId)
-            if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskFinish" {
+            let taskStatus = dataDict?[CPDFClient.Data.taskStatus] as? String ?? ""
+            if (taskStatus == "TaskFinish") {
                 Swift.debugPrint(dataDict as Any)
-            } else if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskProcessing" {
+            } else if (taskStatus == "TaskProcessing") {
                 Swift.debugPrint("Task incomplete processing")
                 // 获取处理结果 可以通过下面的方式
                 self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
