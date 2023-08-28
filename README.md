@@ -52,9 +52,6 @@ var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 // Create an example of a PDF TO WORD task
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
-    guard let _taskId = taskId else {
-        return
-    }
 }
 
 async version(macOS 10.15/iOS 13 Later)
@@ -116,7 +113,7 @@ Task { @MainActor in
 
 
 
-## Execute the task & Get Task Info
+## Execute the task 
 
 After the file upload is completed, call this interface with the task ID to process the files.
 
@@ -146,23 +143,9 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
     }
             
     group.notify(queue: .main) {
-// Execute Task & Query TaskInfo
-        client.resumeTask(taskId: _taskId) { isFinish, params in
-            var success = true
-            var downloadUrl: String?
-            if let datas = params.first as? [[String : Any]] {
-                for data in datas {
-                    let result = CPDFResultFileInfo(dict: data)
-                    if (result.status == "failed") {
-                        success = false
-                        Swift.debugPrint("失败：fileName: \(result.fileName ?? ""), reason: \(result.failureReason ?? "")")
-                    }
-                    downloadUrl = result.downloadUrl
-                }
-            }
-            if (success && downloadUrl != nil) {
-                Swift.debugPrint("处理完成. downloadUrl: \(downloadUrl!)")
-            }
+// Execute Task 
+        client.processFiles(taskId: _taskId) { _ , _ in
+                    
         }
     }
 }
@@ -191,7 +174,49 @@ Task { @MainActor in
 Request task status and file-related meta data based on the task ID.
 
 ```Swift
+// Create a client
+var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
+// Create a task
+client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
+    guard let _taskId = taskId else {
+        return
+    }
+            
+    // upload File
+    let group = DispatchGroup()
+    group.enter()
+//            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+    let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
+    client.uploadFile(filepath: path!, password: "1234", params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: _taskId) { filekey, fileUrl, _ in
+            group.leave()
+    }
+            
+    group.notify(queue: .main) {
+    // execute Task
+    client.processFiles(taskId: _taskId) { _ , _ in
+    // get task processing information
+    client.getTaskInfo(taskId: _taskId) { result, params in
+        if let dataDict = params.first as? [String : Any] {
+            let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String ?? ""
+            if (taskStatus == "TaskFinish") {
+                Swift.debugPrint(dataDict)
+            } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
+                Swift.debugPrint("Task incomplete processing")
+//                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
+//                                    Swift.debugPrint(params)
+//                                }
+            } else {
+                Swift.debugPrint("error: \(dataDict)")
+            }
+        }
+    }
+}
+        
 async version(macOS 10.15/iOS 13 Later)
 Task { @MainActor in
     // Create a task
