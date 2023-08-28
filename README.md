@@ -103,14 +103,14 @@ async version(macOS 10.15/iOS 13 Later)
 Task { @MainActor in
     // Create a task
     let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_WORD) ?? ""
-    
+
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
     let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [
-            CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
-            CPDFFileUploadParameterKey.isContainImg.string() : "1",
-            CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
-        ], taskId: taskId)
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: taskId)
 }
 ```
 
@@ -174,12 +174,12 @@ Task { @MainActor in
 
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
-            CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
-            CPDFFileUploadParameterKey.isContainImg.string() : "1",
-            CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
-        ], taskId: taskId)
-            
+    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: taskId)
+    
     // execute Task
     let result = await self.client.processFiles(taskId: taskId)
 }
@@ -199,7 +199,7 @@ Task { @MainActor in
 
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
+    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
