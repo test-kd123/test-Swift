@@ -53,7 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        PDFRotation.asyncEntrance()
 //        PDFInsert.asyncEntrance()
 //        PDFExtract.asyncEntrance()
-        PDFToWord.asyncEntrance()
+//        PDFToWord.asyncEntrance()
 //        PDFToExcel.asyncEntrance()
 //        PDFToPPT.asyncEntrance()
 //        PDFToHTML.asyncEntrance()
@@ -78,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()
 //        DeleteWatermark.asyncEntrance()
-//            PDFCompression.asyncEntrance()
+            PDFCompression.asyncEntrance()
         } else {
             // Fallback on earlier versions
         }

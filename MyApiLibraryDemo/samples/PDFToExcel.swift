@@ -58,7 +58,7 @@ class PDFToExcel: NSObject {
             
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            _ = await self.client.uploadFile(filepath: path ?? "", params: [
+            let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [
                 CPDFFileUploadParameterKey.contentOptions.string() : "2",
                 CPDFFileUploadParameterKey.worksheetOptions.string() : "1",
                 CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
@@ -66,7 +66,7 @@ class PDFToExcel: NSObject {
             ], taskId: taskId)
             
             // execute Task
-            _ = await self.client.processFiles(taskId: taskId)
+            let success = await self.client.processFiles(taskId: taskId)
             // get task processing information
             let dataDict = await self.client.getTaskInfo(taskId: taskId)
             let taskStatus = dataDict?[CPDFClient.Data.taskStatus] as? String ?? ""

@@ -57,7 +57,7 @@ class PDFToWord: NSObject {
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
+            let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", password: "", params: [
                 CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
                 CPDFFileUploadParameterKey.isContainImg.string() : "1",
                 CPDFFileUploadParameterKey.isFlowLayout.string() : "1"

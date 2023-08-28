@@ -250,7 +250,7 @@ class CPDFClient: NSObject {
                     callback(false, "auth failure")
                     return
                 }
-                self?.getTaskInfo(taskId: taskId, callback: callback)
+                self?.getTaskInfoComplete(taskId: taskId, callback: callback)
             }
             return
         }
@@ -258,7 +258,7 @@ class CPDFClient: NSObject {
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
-            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskProcessing") {
+            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, (data.elementsEqual("TaskProcessing") || data.elementsEqual("TaskWaiting")) {
                 self.getTaskInfoComplete(taskId: taskId, callback: callback)
                 return
             }
