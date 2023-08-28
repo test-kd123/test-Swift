@@ -53,10 +53,13 @@ var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
     guard let _taskId = taskId else {
-        Swift.debugPrint("创建 Task 失败")
         return
     }
 }
+
+async version(macOS 10.15/iOS 13 Later)
+// Create a task
+let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_WORD) ?? ""
 ```
 
 
@@ -74,7 +77,6 @@ var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
 // Get a task id
     guard let _taskId = taskId else {
-        Swift.debugPrint("创建 Task 失败")
         return
     }
             
@@ -94,6 +96,18 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
                 
     }
 }
+
+async version(macOS 10.15/iOS 13 Later)
+// Create a task
+let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_WORD) ?? ""
+
+// upload File
+let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: taskId)
 ```
 
 
@@ -148,8 +162,62 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskId, param in
         }
     }
 }
+
+async version(macOS 10.15/iOS 13 Later)
+Task { @MainActor in
+    // Create a task
+    let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_WORD) ?? ""
+
+    // upload File
+    let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
+            CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+            CPDFFileUploadParameterKey.isContainImg.string() : "1",
+            CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+        ], taskId: taskId)
+            
+    // execute Task
+    let result = await self.client.processFiles(taskId: taskId)
+}
 ```
 
+
+## Get Task Info
+
+Request task status and file-related meta data based on the task ID.
+
+```Swift
+
+async version(macOS 10.15/iOS 13 Later)
+Task { @MainActor in
+    // Create a task
+    let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_WORD) ?? ""
+
+    // upload File
+    let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+    let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "", params: [
+        CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
+        CPDFFileUploadParameterKey.isContainImg.string() : "1",
+        CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
+    ], taskId: taskId)
+    
+    // execute Task
+    let result = await self.client.processFiles(taskId: taskId)
+    // get task processing information
+    let dataDict = await self.client.getTaskInfo(taskId: taskId)
+    let taskStatus = dataDict?[CPDFClient.Data.taskStatus] as? String ?? ""
+    if (taskStatus == "TaskFinish") {
+        Swift.debugPrint(dataDict as Any)
+    } else if (taskStatus == "TaskProcessing") {
+        Swift.debugPrint("Task incomplete processing")
+        self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
+            Swift.debugPrint(params)
+        }
+    } else {
+        Swift.debugPrint("error")
+    }
+}
+```
 
 
 ## Samples
