@@ -47,4 +47,26 @@ class PDFSplit: NSObject {
         }
     }
 
+    class func asyncEntrance() {
+        Task { @MainActor in
+            let taskId = await self.client.createTask(url: CPDFDocumentEditor.SPLIT)
+//
+            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            let _ = await self.client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1-2"]], taskId: taskId ?? "")
+            
+            let _ = await self.client.processFiles(taskId: taskId ?? "")
+            let dataDict = await self.client.getTaskInfo(taskId: taskId ?? "")
+            if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskFinish" {
+                Swift.debugPrint(dataDict as Any)
+            } else if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskProcessing" {
+                Swift.debugPrint("Task incomplete processing")
+                // 获取处理结果 可以通过下面的方式
+                self.client.getTaskInfoComplete(taskId: taskId ?? "") { isFinish, params in
+                    Swift.debugPrint(params)
+                }
+            } else {
+                Swift.debugPrint("出错了")
+            }
+        }
+    }
 }

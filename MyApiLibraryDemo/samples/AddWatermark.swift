@@ -61,4 +61,42 @@ class AddWatermark: NSObject {
             }
         }
     }
+    
+    class func asyncEntrance() {
+        Task { @MainActor in
+            let taskId = await self.client.createTask(url: CPDFDocumentEditor.ADD_WATERMARK)
+//
+            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            let _ = await self.client.uploadFile(filepath: path ?? "", params: [
+                CPDFFileUploadParameterKey.textColor.string():"#59c5bb",
+                CPDFFileUploadParameterKey.type.string():"text",
+                CPDFFileUploadParameterKey.content.string():"text",
+                CPDFFileUploadParameterKey.scale.string():"1",
+                CPDFFileUploadParameterKey.opacity.string():"0.5",
+                CPDFFileUploadParameterKey.rotation.string():"0.785",
+                CPDFFileUploadParameterKey.targetPages.string():"1-2",
+                CPDFFileUploadParameterKey.vertalign.string():"center",
+                CPDFFileUploadParameterKey.horizalign.string():"left",
+                CPDFFileUploadParameterKey.xoffset.string():"100",
+                CPDFFileUploadParameterKey.yoffset.string():"100",
+                CPDFFileUploadParameterKey.fullScreen.string():"1",
+                CPDFFileUploadParameterKey.horizontalSpace.string():"10",
+                CPDFFileUploadParameterKey.verticalSpace.string():"10"
+            ], taskId: taskId ?? "")
+            
+            let _ = await self.client.processFiles(taskId: taskId ?? "")
+            let dataDict = await self.client.getTaskInfo(taskId: taskId ?? "")
+            if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskFinish" {
+                Swift.debugPrint(dataDict as Any)
+            } else if let taskStatus = dataDict?["taskStatus"] as? String, taskStatus == "TaskProcessing" {
+                Swift.debugPrint("Task incomplete processing")
+                // 获取处理结果 可以通过下面的方式
+                self.client.getTaskInfoComplete(taskId: taskId ?? "") { isFinish, params in
+                    Swift.debugPrint(params)
+                }
+            } else {
+                Swift.debugPrint("出错了")
+            }
+        }
+    }
 }

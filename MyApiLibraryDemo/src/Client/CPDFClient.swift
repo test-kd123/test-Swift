@@ -124,6 +124,14 @@ class CPDFClient: NSObject {
         }
     }
     
+    public func createTask(url: String) async -> String? {
+        return await withCheckedContinuation({ continuation in
+            self.createTask(url: url) { taskId, _ in
+                continuation.resume(returning: taskId)
+            }
+        })
+    }
+    
     public func auth(callback:@escaping ((String?)->Void)) {
         let options = [CPDFClient.Parameter.publicKey : self.publicKey ?? "", CPDFClient.Parameter.secretKey: self.secretKey ?? ""]
         CPDFHttpClient.POST(urlString: CPDFURL.API_V1_OAUTH_TOKEN, parameter: options) { [weak self] result, dataDict, error in
@@ -133,6 +141,14 @@ class CPDFClient: NSObject {
             }
             callback(dataDict?[CPDFClient.Data.accessToken] as? String)
         }
+    }
+    
+    public func auth() async -> String? {
+        return await withCheckedContinuation({ continuation in
+            self.auth { accessToken in
+                continuation.resume(returning: accessToken)
+            }
+        })
     }
     
     public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String, callback:@escaping ((String?, String?, Any...)->Void)) {
@@ -165,6 +181,14 @@ class CPDFClient: NSObject {
         CPDFHttpClient.UploadFile(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result, dataDict, error in
             callback(dataDict?[CPDFClient.Data.fileKey] as? String, dataDict?[CPDFClient.Data.fileUrl] as? String, error.debugDescription)
         }
+    }
+    
+    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String) async ->(String?, String?, String?) {
+        return await withCheckedContinuation({ continuation in
+            self.uploadFile(filepath: filepath, password: password, params: params, taskId: taskId) { param1, param2, param3 in
+                continuation.resume(returning: (param1, param2, param3.first as? String))
+            }
+        })
     }
     
     public func resumeTask(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
@@ -205,6 +229,14 @@ class CPDFClient: NSObject {
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_EXECUTE_TASK, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             callback(result)
         }
+    }
+    
+    public func processFiles(taskId: String) async -> Bool {
+        return await withCheckedContinuation({ continuation in
+            self.processFiles(taskId: taskId) { isFinish, params in
+                continuation.resume(returning: isFinish)
+            }
+        })
     }
     
     public func getTaskInfoComplete(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
@@ -260,6 +292,14 @@ class CPDFClient: NSObject {
 //            callback(isFinish, dataDict?[CPDFClient.Data.fileInfoDTOList] as Any)
             callback(result, dataDict as Any, error as Any)
         }
+    }
+    
+    public func getTaskInfo(taskId: String) async -> [String : Any]? {
+        return await withCheckedContinuation({ continuation in
+            self.getTaskInfo(taskId: taskId) { isFinish, params in
+                continuation.resume(returning: params.first as? [String : Any])
+            }
+        })
     }
     
     private func accessTokenIsValid() -> Bool {
