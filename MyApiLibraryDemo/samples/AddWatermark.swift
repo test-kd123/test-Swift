@@ -21,8 +21,9 @@ class AddWatermark: NSObject {
             
             let group = DispatchGroup()
             group.enter()
-            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, params: [
+//            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
+            self.client.uploadFile(filepath: path!, password: "1234", params: [
                 CPDFFileUploadParameterKey.textColor.string():"#59c5bb",
                 CPDFFileUploadParameterKey.type.string():"text",
                 CPDFFileUploadParameterKey.content.string():"text",
@@ -50,9 +51,9 @@ class AddWatermark: NSObject {
                             } else {
                                 Swift.debugPrint("Task incomplete processing")
                                 // 获取处理结果 可以通过下面的方式
-                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
-                                    Swift.debugPrint(params)
-                                }
+//                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
+//                                    Swift.debugPrint(params)
+//                                }
                             }
                         }
                     }

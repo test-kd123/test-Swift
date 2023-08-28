@@ -21,8 +21,9 @@ class PDFToRTF: NSObject {
             
             let group = DispatchGroup()
             group.enter()
-            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, params: [CPDFFileUploadParameterKey.isContainAnnot.string() : "1", CPDFFileUploadParameterKey.isContainImg.string() : "1"], taskId: _taskId) { filekey, fileUrl, _ in
+//            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
+            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.isContainAnnot.string() : "1", CPDFFileUploadParameterKey.isContainImg.string() : "1"], taskId: _taskId) { filekey, fileUrl, _ in
                 group.leave()
             }
             
