@@ -14,8 +14,9 @@ class PDFToJPG: NSObject {
     
     class func entrance() {
         // Create a task
-        self.client.createTask(url: CPDFConversion.PDF_TO_JPG) { model in
-            guard let _taskId = model?.taskId else {
+        self.client.createTask(url: CPDFConversion.PDF_TO_JPG) { taskModel in
+            guard let taskId = taskModel?.taskId else {
+                Swift.debugPrint(taskModel?.errorDesc ?? "")
                 return
             }
             
@@ -24,25 +25,34 @@ class PDFToJPG: NSObject {
             group.enter()
 //            let path = Bundle.main.path(forResource: "IMG_00001(2)", ofType: "pdf")
             let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.imgDpi.string() : "300"], taskId: _taskId) { uploadFileModel in
+            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.imgDpi.string() : "300"], taskId: taskId) { uploadFileModel in
+                if let errorInfo = uploadFileModel?.errorDesc {
+                    Swift.debugPrint(errorInfo)
+                }
                 group.leave()
             }
             
             group.notify(queue: .main) {
                 // execute Task
-                self.client.processFiles(taskId: _taskId) { _ in
+                self.client.processFiles(taskId: taskId) { processFileModel in
+                    if let errorInfo = processFileModel?.errorDesc {
+                        Swift.debugPrint(errorInfo)
+                    }
                     // get task processing information
-                    self.client.getTaskInfo(taskId: _taskId) { taskInfoModel in
-                        let taskStatus = taskInfoModel?.taskStatus ?? ""
-                        if (taskStatus == "TaskFinish") {
-                            Swift.debugPrint(taskInfoModel)
-                        } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
+                    self.client.getTaskInfo(taskId: taskId) { taskInfoModel in
+                        guard let _model = taskInfoModel else {
+                            Swift.debugPrint("error:....")
+                            return
+                        }
+                        if (_model.isFinish()) {
+                            _model.printInfo()
+                        } else if (_model.isRuning()) {
                             Swift.debugPrint("Task incomplete processing")
-                            //                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
-                            //                                    Swift.debugPrint(params)
-                            //                                }
+//                            self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
+//                                Swift.debugPrint(params)
+//                            }
                         } else {
-                            Swift.debugPrint("error: \(taskInfoModel?.errorDesc ?? "")")
+                            Swift.debugPrint("error: \(_model.errorDesc ?? "")")
                         }
                     }
                 }

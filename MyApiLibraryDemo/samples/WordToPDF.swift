@@ -39,20 +39,19 @@ class WordToPDF: NSObject {
                     }
                     // get task processing information
                     self.client.getTaskInfo(taskId: taskId) { taskInfoModel in
-                        let taskStatus = taskInfoModel?.taskStatus ?? ""
                         guard let _model = taskInfoModel else {
                             Swift.debugPrint("error:....")
                             return
                         }
                         if (_model.isFinish()) {
-                            Swift.debugPrint(taskInfoModel)
+                            Swift.debugPrint(_model)
                         } else if (_model.isRuning()) {
                             Swift.debugPrint("Task incomplete processing")
                             self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                                 Swift.debugPrint(params)
                             }
                         } else {
-                            Swift.debugPrint("error: \(taskInfoModel?.errorDesc ?? "")")
+                            Swift.debugPrint("error: \(_model.errorDesc ?? "")")
                         }
                     }
                 }

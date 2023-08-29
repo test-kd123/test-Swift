@@ -23,10 +23,12 @@ class CPDFTaskInfoResult: NSObject {
     var fileInfoDTOList: [CPDFFileInfo]?
     
     var errorDesc: String?
+    private var dict: [String : Any] = [:]
     
     convenience init(dict: [String : Any]) {
         self.init()
             
+        self.dict = dict
         self.taskId = dict["taskId"] as? String
         self.taskFileNum = dict["taskFileNum"] as? Int64
         self.taskSuccessNum = dict["taskSuccessNum"] as? Int64
@@ -62,5 +64,9 @@ class CPDFTaskInfoResult: NSObject {
             return false
         }
         return status == "TaskProcessing" || status == "TaskWaiting"
+    }
+    
+    func printInfo() {
+        Swift.debugPrint(self.dict)
     }
 }

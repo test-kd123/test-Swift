@@ -52,53 +52,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "200E692C-34AB-4883-A11A-24D96EA20885"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyApiLibraryDemo/samples/PDFDelete.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "entrance()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "200E692C-34AB-4883-A11A-24D96EA20885 - bf94482cc1abfbc9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFTaskInfoResult&gt;) -&gt; () in closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFCreateTaskResult&gt;) -&gt; () in closure #2 () -&gt; () in closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFCreateTaskResult&gt;) -&gt; () in static MyApiLibraryDemo.PDFDelete.entrance() -&gt; ()"
-                  moduleName = "MyApiLibraryDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kdanmobile/work/tangchao/code/test-Swift/MyApiLibraryDemo/samples/PDFDelete.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "79">
-               </Location>
-               <Location
-                  uuid = "200E692C-34AB-4883-A11A-24D96EA20885 - bf94482cc1abfbc9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFTaskInfoResult&gt;) -&gt; () in closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFCreateTaskResult&gt;) -&gt; () in closure #2 () -&gt; () in closure #1 (Swift.Optional&lt;MyApiLibraryDemo.CPDFCreateTaskResult&gt;) -&gt; () in static MyApiLibraryDemo.PDFDelete.entrance() -&gt; ()"
-                  moduleName = "MyApiLibraryDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kdanmobile/work/tangchao/code/test-Swift/MyApiLibraryDemo/samples/PDFDelete.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "114">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
