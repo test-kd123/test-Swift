@@ -80,19 +80,21 @@ class PDFMerge: NSObject {
             let uploadFileModel2 = await self.client.uploadFile(filepath: path ?? "", password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
             
             // execute Task
-            let success = await self.client.processFiles(taskId: taskId)
+            let _ = await self.client.processFiles(taskId: taskId)
             // get task processing information
             let taskInfoModel = await self.client.getTaskInfo(taskId: taskId)
-            let taskStatus = taskInfoModel?.taskStatus ?? ""
-            if (taskStatus == "TaskFinish") {
-                Swift.debugPrint(taskInfoModel as Any)
-            } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
+            guard let _model = taskInfoModel else {
+                Swift.debugPrint("error:....")
+                return
+            }
+            if (_model.isFinish()) {
+                _model.printInfo()
+            } else if (_model.isRuning()) {
                 Swift.debugPrint("Task incomplete processing")
                 self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             } else {
-               
                 Swift.debugPrint("error: \(taskInfoModel?.errorDesc ?? "")")
             }
         }
