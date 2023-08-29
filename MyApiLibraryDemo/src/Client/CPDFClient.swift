@@ -64,12 +64,12 @@ extension CPDFClient.Parameter {
 extension CPDFClient.Data {
     static let accessToken      = "accessToken"
     static let expiresIn        = "expiresIn"
-    
+
     static let taskId           = "taskId"
-    
+
     static let fileKey          = "fileKey"
     static let fileUrl          = "fileUrl"
-    
+
     static let taskStatus       = "taskStatus"
     static let fileInfoDTOList  = "fileInfoDTOList"
 }
@@ -108,11 +108,11 @@ class CPDFClient: NSObject {
     
     public func createTask(url: String, callback:@escaping (CPDFCreateTaskResult?)->Void) {
         if (!self.accessTokenIsValid()) {
-            self.auth { [weak self] accessToken in
-                guard let _ = accessToken else {
-                    let model = CPDFCreateTaskResult(dict: [:])
-                    model.errorDesc = "auth failure"
-                    callback(model)
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFCreateTaskResult(dict: [:])
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
                     return
                 }
                 
@@ -149,7 +149,7 @@ class CPDFClient: NSObject {
                 let model = CPDFOauthResult(dict: _dataDict)
                 self?.accessToken = model.accessToken
                 if let expiresIn = model.expiresIn, let data = Float(expiresIn) {
-                    self?.expireTime = Date().timeIntervalSince1970*1000+Double(data)
+                    self?.expireTime = Date().timeIntervalSince1970*1000+Double(data*1000)
                 }
                 callback(model)
             } else {
@@ -171,11 +171,11 @@ class CPDFClient: NSObject {
     
     public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String, callback:@escaping ((CPDFUploadFileResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
-            self.auth { [weak self] accessToken in
-                guard let _ = accessToken else {
-                    let model = CPDFUploadFileResult()
-                    model.errorDesc = "auth failure"
-                    callback(model)
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFUploadFileResult()
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
                     return
                 }
                 

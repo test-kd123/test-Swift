@@ -23,9 +23,8 @@ class DeleteWatermark: NSObject {
             // upload File
             let group = DispatchGroup()
             group.enter()
-//            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "1234", params: [:], taskId: taskId) { uploadFileModel in
+            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            self.client.uploadFile(filepath: path!, password: "", params: [:], taskId: taskId) { uploadFileModel in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }

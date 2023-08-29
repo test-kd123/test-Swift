@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        PDFToHTML.entrance()
 //        PDFToTXT.entrance()
 //        PDFToCSV.entrance()
-        PDFToRTF.entrance()
+//        PDFToRTF.entrance()
 //        PDFToJPG.entrance()
 //        PDFToPNG.entrance()
 //        WordToPDF.entrance()
@@ -78,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()
 //        DeleteWatermark.asyncEntrance()
-//            PDFCompression.asyncEntrance()
+            PDFCompression.asyncEntrance()
         } else {
             // Fallback on earlier versions
         }

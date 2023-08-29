@@ -24,15 +24,14 @@ class PDFMerge: NSObject {
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-//            let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
+            self.client.uploadFile(filepath: path!, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
                 group.leave()
             }
             group.enter()
-            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
+            self.client.uploadFile(filepath: path!, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
@@ -76,8 +75,8 @@ class PDFMerge: NSObject {
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
-            let uploadFileModel2 = await self.client.uploadFile(filepath: path ?? "", password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
+            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
+            let uploadFileModel2 = await self.client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
             
             // execute Task
             let _ = await self.client.processFiles(taskId: taskId)

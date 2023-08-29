@@ -23,9 +23,8 @@ class PDFExtract: NSObject {
             // upload File
             let group = DispatchGroup()
             group.enter()
-//            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "1234", params: [
+            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            self.client.uploadFile(filepath: path!, password: "", params: [
                 CPDFFileUploadParameterKey.pageOptions.string() : ["2"],
             ], taskId: taskId) { uploadFileModel in
                 if let errorInfo = uploadFileModel?.errorDesc {
