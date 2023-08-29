@@ -11,7 +11,7 @@ class CPDFHttpClient: NSObject {
     private static let baseUrl = "https://api-server.compdf.com/server/"
     private static let boundary = "CPDFBoundary"
     
-    public class func GET(urlString: String, parameter: [String : String]? = nil, headers: [String : String]? = nil, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
+    public class func GET(urlString: String, parameter: [String : String]? = nil, headers: [String : String]? = nil, callback:@escaping ((Bool, [String : Any]?, String?)->Void)) {
         var _urlString = "\(self.baseUrl)"+urlString
         if let data = parameter, !data.isEmpty {
             _urlString.append("?")
@@ -42,25 +42,25 @@ class CPDFHttpClient: NSObject {
         let task: URLSessionDataTask = session.dataTask(with: request) { data , response, error in
             DispatchQueue.main.async {
                 if let _ = error {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
                 guard let _data = data else {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
-                let result = self.JsonDataParse(data: _data)
-                if let _result = result, let code = _result["code"] as? String, code == "200" {
-                    callback(true, _result["data"] as? [String : Any], nil)
+                if let result = self.JsonDataParse(data: _data) {
+                    let resultMap = CPDFResultMap(dict: result)
+                    callback(resultMap.isSuccess(), resultMap.data as? [String : Any], error.debugDescription)
                     return
                 }
-                callback(false, nil, error)
+                callback(false, nil, error.debugDescription)
             }
         }
         task.resume()
     }
     
-    public class func POST(urlString: String, parameter: [String : String]? = nil, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
+    public class func POST(urlString: String, parameter: [String : String]? = nil, callback:@escaping ((Bool, [String : Any]?, String?)->Void)) {
         let url: URL = URL(string: "\(self.baseUrl)"+urlString)!
          
         let session = URLSession.shared
@@ -80,26 +80,27 @@ class CPDFHttpClient: NSObject {
         let task: URLSessionDataTask = session.dataTask(with: request) { data , response, error in
             DispatchQueue.main.async {
                 if let _ = error {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
                 guard let _data = data else {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
-                let result = self.JsonDataParse(data: _data)
-                if let _result = result, let code = _result["code"] as? String, code == "200" {
-                    callback(true, _result["data"] as? [String : Any], nil)
+                if let result = self.JsonDataParse(data: _data) {
+                    let resultMap = CPDFResultMap(dict: result)
+                    callback(resultMap.isSuccess(), resultMap.data as? [String : Any], error.debugDescription)
                     return
                 }
-                callback(false, nil, error)
+                
+                callback(false, nil, error.debugDescription)
             }
         }
         task.resume()
         
     }
     
-    public class func UploadFile(urlString: String, parameter: [String : Any]? = nil, headers: [String : String]? = nil, filepath: String, callback:@escaping ((Bool, [String : Any]?, Error?)->Void)) {
+    public class func UploadFile(urlString: String, parameter: [String : Any]? = nil, headers: [String : String]? = nil, filepath: String, callback:@escaping ((Bool, [String : Any]?, String?)->Void)) {
         let url = URL(string: self.baseUrl + urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
@@ -149,19 +150,20 @@ class CPDFHttpClient: NSObject {
         let task = session.dataTask(with: request) {data , response, error in
             DispatchQueue.main.async {
                 if let _ = error {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
                 guard let _data = data else {
-                    callback(false, nil, error)
+                    callback(false, nil, error.debugDescription)
                     return
                 }
-                let result = self.JsonDataParse(data: _data)
-                if let _result = result, let code = _result["code"] as? String, code == "200" {
-                    callback(true, _result["data"] as? [String : Any], nil)
+                if let result = self.JsonDataParse(data: _data) {
+                    let resultMap = CPDFResultMap(dict: result)
+                    callback(resultMap.isSuccess(), resultMap.data as? [String : Any], error.debugDescription)
                     return
                 }
-                callback(false, nil, error)
+                
+                callback(false, nil, error.debugDescription)
             }
         }
         task.resume()

@@ -14,8 +14,8 @@ class PDFToJPG: NSObject {
     
     class func entrance() {
         // Create a task
-        self.client.createTask(url: CPDFConversion.PDF_TO_JPG) { taskId, param in
-            guard let _taskId = taskId else {
+        self.client.createTask(url: CPDFConversion.PDF_TO_JPG) { model in
+            guard let _taskId = model?.taskId else {
                 return
             }
             
@@ -24,27 +24,25 @@ class PDFToJPG: NSObject {
             group.enter()
 //            let path = Bundle.main.path(forResource: "IMG_00001(2)", ofType: "pdf")
             let path = Bundle.main.path(forResource: "test_password", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.imgDpi.string() : "300"], taskId: _taskId) { filekey, fileUrl, _ in
+            self.client.uploadFile(filepath: path!, password: "1234", params: [CPDFFileUploadParameterKey.imgDpi.string() : "300"], taskId: _taskId) { uploadFileModel in
                 group.leave()
             }
             
             group.notify(queue: .main) {
                 // execute Task
-                self.client.processFiles(taskId: _taskId) { _ , _ in
+                self.client.processFiles(taskId: _taskId) { _ in
                     // get task processing information
-                    self.client.getTaskInfo(taskId: _taskId) { result, params in
-                        if let dataDict = params.first as? [String : Any] {
-                            let taskStatus = dataDict[CPDFClient.Data.taskStatus] as? String ?? ""
-                            if (taskStatus == "TaskFinish") {
-                                Swift.debugPrint(dataDict)
-                            } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
-                                Swift.debugPrint("Task incomplete processing")
-//                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
-//                                    Swift.debugPrint(params)
-//                                }
-                            } else {
-                                Swift.debugPrint("error: \(dataDict)")
-                            }
+                    self.client.getTaskInfo(taskId: _taskId) { taskInfoModel in
+                        let taskStatus = taskInfoModel?.taskStatus ?? ""
+                        if (taskStatus == "TaskFinish") {
+                            Swift.debugPrint(taskInfoModel)
+                        } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
+                            Swift.debugPrint("Task incomplete processing")
+                            //                                self.client.getTaskInfoComplete(taskId: _taskId) { isFinish, params in
+                            //                                    Swift.debugPrint(params)
+                            //                                }
+                        } else {
+                            Swift.debugPrint("error: \(taskInfoModel?.errorDesc ?? "")")
                         }
                     }
                 }
@@ -56,28 +54,30 @@ class PDFToJPG: NSObject {
     class func asyncEntrance() {
         Task { @MainActor in
             // Create a task
-            let taskId = await self.client.createTask(url: CPDFConversion.PDF_TO_JPG) ?? ""
+            let taskModel = await self.client.createTask(url: CPDFConversion.PDF_TO_JPG)
+            let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let (fileKey, fileUrl, error) = await self.client.uploadFile(filepath: path ?? "",  password: "",params: [
+            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "",  password: "",params: [
                 CPDFFileUploadParameterKey.imgDpi.string() : "300"
             ], taskId: taskId)
             
             // execute Task
             let success = await self.client.processFiles(taskId: taskId)
             // get task processing information
-            let dataDict = await self.client.getTaskInfo(taskId: taskId)
-            let taskStatus = dataDict?[CPDFClient.Data.taskStatus] as? String ?? ""
+            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId)
+            let taskStatus = taskInfoModel?.taskStatus ?? ""
             if (taskStatus == "TaskFinish") {
-                Swift.debugPrint(dataDict as Any)
+                Swift.debugPrint(taskInfoModel as Any)
             } else if (taskStatus == "TaskProcessing" || taskStatus == "TaskWaiting") {
                 Swift.debugPrint("Task incomplete processing")
                 self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             } else {
-                Swift.debugPrint("error: \(dataDict ?? [:])")
+               
+                Swift.debugPrint("error: \(taskInfoModel?.errorDesc ?? "")")
             }
         }
     }

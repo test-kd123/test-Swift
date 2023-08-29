@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class CPDFResultFileInfo: NSObject {
+class CPDFFileInfo: NSObject {
     var fileKey: String?
     var taskId: String?
     var fileName: String?

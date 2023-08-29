@@ -106,11 +106,13 @@ class CPDFClient: NSObject {
         self._secretKey = secretKey
     }
     
-    public func createTask(url: String, callback:@escaping (String?, Any)->Void) {
+    public func createTask(url: String, callback:@escaping (CPDFCreateTaskResult?)->Void) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] accessToken in
                 guard let _ = accessToken else {
-                    callback(nil, "auth failure")
+                    let model = CPDFCreateTaskResult(dict: [:])
+                    model.errorDesc = "auth failure"
+                    callback(model)
                     return
                 }
                 
@@ -120,44 +122,60 @@ class CPDFClient: NSObject {
         }
         
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_CREATE_TASK+url, headers: self.getRequestHeaderInfo()) { result, dataDict, error in
-            callback(dataDict?[CPDFClient.Data.taskId] as? String, error.debugDescription)
+            guard let _dataDict = dataDict else {
+                let model = CPDFCreateTaskResult(dict: [:])
+                model.errorDesc = error
+                callback(model)
+                return
+            }
+            let model = CPDFCreateTaskResult(dict: _dataDict)
+            callback(model)
         }
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func createTask(url: String) async -> String? {
+    public func createTask(url: String) async -> CPDFCreateTaskResult? {
         return await withCheckedContinuation({ continuation in
-            self.createTask(url: url) { taskId, _ in
-                continuation.resume(returning: taskId)
+            self.createTask(url: url) { model in
+                continuation.resume(returning: model)
             }
         })
     }
     
-    public func auth(callback:@escaping ((String?)->Void)) {
+    public func auth(callback:@escaping ((CPDFOauthResult?)->Void)) {
         let options = [CPDFClient.Parameter.publicKey : self.publicKey ?? "", CPDFClient.Parameter.secretKey: self.secretKey ?? ""]
         CPDFHttpClient.POST(urlString: CPDFURL.API_V1_OAUTH_TOKEN, parameter: options) { [weak self] result, dataDict, error in
-            self?.accessToken = dataDict?[CPDFClient.Data.accessToken] as? String
-            if let expiresIn = dataDict?[CPDFClient.Data.expiresIn] as? String, let data = Float(expiresIn) {
-                self?.expireTime = Date().timeIntervalSince1970*1000+Double(data)
+            if let _dataDict = dataDict {
+                let model = CPDFOauthResult(dict: _dataDict)
+                self?.accessToken = model.accessToken
+                if let expiresIn = model.expiresIn, let data = Float(expiresIn) {
+                    self?.expireTime = Date().timeIntervalSince1970*1000+Double(data)
+                }
+                callback(model)
+            } else {
+                self?.accessToken = nil
+                self?.expireTime = nil
+                callback(nil)
             }
-            callback(dataDict?[CPDFClient.Data.accessToken] as? String)
         }
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func auth() async -> String? {
+    public func auth() async -> CPDFOauthResult? {
         return await withCheckedContinuation({ continuation in
-            self.auth { accessToken in
-                continuation.resume(returning: accessToken)
+            self.auth { model in
+                continuation.resume(returning: model)
             }
         })
     }
     
-    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String, callback:@escaping ((String?, String?, Any...)->Void)) {
+    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String, callback:@escaping ((CPDFUploadFileResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] accessToken in
                 guard let _ = accessToken else {
-                    callback(nil, nil, "auth failure")
+                    let model = CPDFUploadFileResult()
+                    model.errorDesc = "auth failure"
+                    callback(model)
                     return
                 }
                 
@@ -177,28 +195,34 @@ class CPDFClient: NSObject {
             parameter[CPDFClient.Parameter.parameter] = jsonString
         }
         
-//        let data = try?Data(contentsOf: URL(fileURLWithPath: filepath))
-//        parameter["file"] =  data
-        
         CPDFHttpClient.UploadFile(urlString: CPDFURL.API_V1_UPLOAD_FILE, parameter: parameter, headers: self.getRequestHeaderInfo(), filepath: filepath) { result, dataDict, error in
-            callback(dataDict?[CPDFClient.Data.fileKey] as? String, dataDict?[CPDFClient.Data.fileUrl] as? String, error.debugDescription)
+            guard let _dataDict = dataDict else {
+                let model = CPDFUploadFileResult(dict: [:])
+                model.errorDesc = error
+                callback(model)
+                return
+            }
+            let model = CPDFUploadFileResult(dict: _dataDict)
+            callback(model)
         }
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String) async ->(String?, String?, String?) {
+    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String) async ->CPDFUploadFileResult? {
         return await withCheckedContinuation({ continuation in
-            self.uploadFile(filepath: filepath, password: password, params: params, taskId: taskId) { param1, param2, param3 in
-                continuation.resume(returning: (param1, param2, param3.first as? String))
+            self.uploadFile(filepath: filepath, password: password, params: params, taskId: taskId) { model in
+                continuation.resume(returning: model)
             }
         })
     }
     
-    public func resumeTask(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func resumeTask(taskId: String, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
-            self.auth { [weak self] accessToken in
-                guard let _ = accessToken else {
-                    callback(false, "auth failure")
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFTaskInfoResult()
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
                     return
                 }
                 self?.resumeTask(taskId: taskId, callback: callback)
@@ -206,20 +230,24 @@ class CPDFClient: NSObject {
             return
         }
         
-        self.processFiles(taskId: taskId) { [weak self] isFinish, params in
-            if (!isFinish) {
-                callback(false, "Process Files failure")
+        self.processFiles(taskId: taskId) { [weak self] model in
+            guard let _ = model?.taskId else {
+                let _model = CPDFTaskInfoResult()
+                _model.errorDesc = "Process Files failure"
+                callback(_model)
                 return
             }
             self?.getTaskInfo(taskId: taskId, callback: callback)
         }
     }
     
-    public func processFiles(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func processFiles(taskId: String, callback:@escaping ((CPDFCreateTaskResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
-            self.auth { [weak self] accessToken in
-                guard let _ = accessToken else {
-                    callback(false, "auth failure")
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFCreateTaskResult(dict: [:])
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
                     return
                 }
                 self?.processFiles(taskId: taskId, callback: callback)
@@ -230,15 +258,22 @@ class CPDFClient: NSObject {
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_EXECUTE_TASK, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
-            callback(result)
+            guard let _dataDict = dataDict else {
+                let model = CPDFCreateTaskResult(dict: [:])
+                model.errorDesc = error
+                callback(model)
+                return
+            }
+            let model = CPDFCreateTaskResult(dict: _dataDict)
+            callback(model)
         }
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func processFiles(taskId: String) async -> Bool {
+    public func processFiles(taskId: String) async -> CPDFCreateTaskResult? {
         return await withCheckedContinuation({ continuation in
-            self.processFiles(taskId: taskId) { isFinish, params in
-                continuation.resume(returning: isFinish)
+            self.processFiles(taskId: taskId) { model in
+                continuation.resume(returning: model)
             }
         })
     }
@@ -270,11 +305,13 @@ class CPDFClient: NSObject {
         }
     }
     
-    public func getTaskInfo(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func getTaskInfo(taskId: String, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
-            self.auth { [weak self] accessToken in
-                guard let _ = accessToken else {
-                    callback(false, "auth failure")
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFTaskInfoResult()
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
                     return
                 }
                 self?.getTaskInfo(taskId: taskId, callback: callback)
@@ -285,24 +322,22 @@ class CPDFClient: NSObject {
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
-//            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskProcessing") {
-//                self.getTaskInfo(taskId: taskId, callback: callback)
-//                return
-//            }
-//            var isFinish = false
-//            if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, data.elementsEqual("TaskFinish") {
-//                isFinish = true
-//            }
-//            callback(isFinish, dataDict?[CPDFClient.Data.fileInfoDTOList] as Any)
-            callback(result, dataDict as Any, error as Any)
+            guard let _dataDict = dataDict else {
+                let model = CPDFTaskInfoResult(dict: [:])
+                model.errorDesc = error
+                callback(model)
+                return
+            }
+            let model = CPDFTaskInfoResult(dict: _dataDict)
+            callback(model)
         }
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func getTaskInfo(taskId: String) async -> [String : Any]? {
+    public func getTaskInfo(taskId: String) async -> CPDFTaskInfoResult? {
         return await withCheckedContinuation({ continuation in
-            self.getTaskInfo(taskId: taskId) { isFinish, params in
-                continuation.resume(returning: params.first as? [String : Any])
+            self.getTaskInfo(taskId: taskId) { model in
+                continuation.resume(returning: model)
             }
         })
     }
