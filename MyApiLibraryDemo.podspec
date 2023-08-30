@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MyApiLibraryDemo"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "MyApiLibraryDemo."
 
   s.description  = <<-DESC
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = "Classes/**/*.h"
 
-  # s.resources  = "TCCommonKit/TCCommonKit/**/*.{storyboard,xib}", "TCCommonKit/Assets.xcassets"
+  # s.resources  = "xx/xx/**/*.{storyboard,xib}", "TCCommonKit/Assets.xcassets"
   # s.resources = "Resources/*.png"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
@@ -43,12 +43,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "YTCategorys"
   #  s.dependency "Masonry", '~> 1.1.0'
-  # s.dependency "HLNetworking+Lovek12"
-  # s.dependency "HLBaseUser"
-  # s.dependency "Lothar"
-  # s.dependency "UMengUShare/Social/Sina"
   # s.dependency "UMengUShare/Social/WeChat"
   # s.dependency "UMengUShare/Social/QQ""
 end
