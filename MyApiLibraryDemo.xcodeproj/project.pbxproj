@@ -67,6 +67,12 @@
 		BB650C432A9D93C900BDBF92 /* CPDFCreateTaskResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB650C422A9D93C900BDBF92 /* CPDFCreateTaskResult.swift */; };
 		BB650C452A9D9C2600BDBF92 /* CPDFUploadFileResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB650C442A9D9C2600BDBF92 /* CPDFUploadFileResult.swift */; };
 		BB650C472A9DB70500BDBF92 /* CPDFTaskInfoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB650C462A9DB70500BDBF92 /* CPDFTaskInfoResult.swift */; };
+		BB7BC14B2A9F6A7900A943B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7BC14A2A9F6A7900A943B9 /* AppDelegate.swift */; };
+		BB7BC14D2A9F6A7900A943B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7BC14C2A9F6A7900A943B9 /* SceneDelegate.swift */; };
+		BB7BC14F2A9F6A7900A943B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7BC14E2A9F6A7900A943B9 /* ViewController.swift */; };
+		BB7BC1522A9F6A7900A943B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB7BC1502A9F6A7900A943B9 /* Main.storyboard */; };
+		BB7BC1542A9F6A7B00A943B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB7BC1532A9F6A7B00A943B9 /* Assets.xcassets */; };
+		BB7BC1572A9F6A7B00A943B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB7BC1552A9F6A7B00A943B9 /* LaunchScreen.storyboard */; };
 		BBAC8C0E2A984B1F00DB33A2 /* CPDFResultFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAC8C0D2A984B1F00DB33A2 /* CPDFResultFileInfo.swift */; };
 		BBAC8C102A987FE500DB33A2 /* test_html.pdf in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C0F2A987FE500DB33A2 /* test_html.pdf */; };
 		BBAC8C122A98807700DB33A2 /* test_html.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBAC8C112A98807700DB33A2 /* test_html.jpg */; };
@@ -139,6 +145,14 @@
 		BB650C422A9D93C900BDBF92 /* CPDFCreateTaskResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFCreateTaskResult.swift; sourceTree = "<group>"; };
 		BB650C442A9D9C2600BDBF92 /* CPDFUploadFileResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFUploadFileResult.swift; sourceTree = "<group>"; };
 		BB650C462A9DB70500BDBF92 /* CPDFTaskInfoResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFTaskInfoResult.swift; sourceTree = "<group>"; };
+		BB7BC1482A9F6A7900A943B9 /* MyApiLibraryIOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyApiLibraryIOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB7BC14A2A9F6A7900A943B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BB7BC14C2A9F6A7900A943B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		BB7BC14E2A9F6A7900A943B9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BB7BC1512A9F6A7900A943B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BB7BC1532A9F6A7B00A943B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BB7BC1562A9F6A7B00A943B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BB7BC1582A9F6A7B00A943B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBAC8C0D2A984B1F00DB33A2 /* CPDFResultFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFResultFileInfo.swift; sourceTree = "<group>"; };
 		BBAC8C0F2A987FE500DB33A2 /* test_html.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = test_html.pdf; sourceTree = "<group>"; };
 		BBAC8C112A98807700DB33A2 /* test_html.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test_html.jpg; sourceTree = "<group>"; };
@@ -157,6 +171,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB7BC1452A9F6A7900A943B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -164,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				BB414F1C2A8DF41700D30617 /* MyApiLibraryDemo */,
+				BB7BC1492A9F6A7900A943B9 /* MyApiLibraryIOSDemo */,
 				BB414F1B2A8DF41700D30617 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -172,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				BB414F1A2A8DF41700D30617 /* MyApiLibraryDemo.app */,
+				BB7BC1482A9F6A7900A943B9 /* MyApiLibraryIOSDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -293,6 +316,20 @@
 			path = samples;
 			sourceTree = "<group>";
 		};
+		BB7BC1492A9F6A7900A943B9 /* MyApiLibraryIOSDemo */ = {
+			isa = PBXGroup;
+			children = (
+				BB7BC14A2A9F6A7900A943B9 /* AppDelegate.swift */,
+				BB7BC14C2A9F6A7900A943B9 /* SceneDelegate.swift */,
+				BB7BC14E2A9F6A7900A943B9 /* ViewController.swift */,
+				BB7BC1502A9F6A7900A943B9 /* Main.storyboard */,
+				BB7BC1532A9F6A7B00A943B9 /* Assets.xcassets */,
+				BB7BC1552A9F6A7B00A943B9 /* LaunchScreen.storyboard */,
+				BB7BC1582A9F6A7B00A943B9 /* Info.plist */,
+			);
+			path = MyApiLibraryIOSDemo;
+			sourceTree = "<group>";
+		};
 		BBDA107E2A8F47AF0046A07C /* resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,6 +373,23 @@
 			productReference = BB414F1A2A8DF41700D30617 /* MyApiLibraryDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BB7BC1472A9F6A7900A943B9 /* MyApiLibraryIOSDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB7BC15B2A9F6A7B00A943B9 /* Build configuration list for PBXNativeTarget "MyApiLibraryIOSDemo" */;
+			buildPhases = (
+				BB7BC1442A9F6A7900A943B9 /* Sources */,
+				BB7BC1452A9F6A7900A943B9 /* Frameworks */,
+				BB7BC1462A9F6A7900A943B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyApiLibraryIOSDemo;
+			productName = MyApiLibraryIOSDemo;
+			productReference = BB7BC1482A9F6A7900A943B9 /* MyApiLibraryIOSDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -347,6 +401,9 @@
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					BB414F192A8DF41700D30617 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					BB7BC1472A9F6A7900A943B9 = {
 						CreatedOnToolsVersion = 14.2;
 					};
 				};
@@ -365,6 +422,7 @@
 			projectRoot = "";
 			targets = (
 				BB414F192A8DF41700D30617 /* MyApiLibraryDemo */,
+				BB7BC1472A9F6A7900A943B9 /* MyApiLibraryIOSDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -393,6 +451,16 @@
 				BB600F1D2A94479300026A2D /* test2.jpg in Resources */,
 				BB600F432A94A33800026A2D /* test.pdf in Resources */,
 				BBAC8C162A98848500DB33A2 /* IMG_00001(2).jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB7BC1462A9F6A7900A943B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB7BC1572A9F6A7B00A943B9 /* LaunchScreen.storyboard in Resources */,
+				BB7BC1542A9F6A7B00A943B9 /* Assets.xcassets in Resources */,
+				BB7BC1522A9F6A7900A943B9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +522,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB7BC1442A9F6A7900A943B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB7BC14F2A9F6A7900A943B9 /* ViewController.swift in Sources */,
+				BB7BC14B2A9F6A7900A943B9 /* AppDelegate.swift in Sources */,
+				BB7BC14D2A9F6A7900A943B9 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -463,6 +541,22 @@
 				BB414F242A8DF41900D30617 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BB7BC1502A9F6A7900A943B9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB7BC1512A9F6A7900A943B9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BB7BC1552A9F6A7B00A943B9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB7BC1562A9F6A7B00A943B9 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -653,6 +747,67 @@
 			};
 			name = Release;
 		};
+		BB7BC1592A9F6A7B00A943B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4GGQPGRTSV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyApiLibraryIOSDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kdan.MyApiLibraryIOSDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BB7BC15A2A9F6A7B00A943B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4GGQPGRTSV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyApiLibraryIOSDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kdan.MyApiLibraryIOSDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -670,6 +825,15 @@
 			buildConfigurations = (
 				BB414F2A2A8DF41900D30617 /* Debug */,
 				BB414F2B2A8DF41900D30617 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB7BC15B2A9F6A7B00A943B9 /* Build configuration list for PBXNativeTarget "MyApiLibraryIOSDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB7BC1592A9F6A7B00A943B9 /* Debug */,
+				BB7BC15A2A9F6A7B00A943B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

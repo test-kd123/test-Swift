@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-enum CPDFFileUploadParameterKey: String {
+public enum CPDFFileUploadParameterKey: String {
     case pageOptions         = "pageOptions"
     case rotation            = "rotation"
     case targetPage          = "targetPage"

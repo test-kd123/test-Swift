@@ -56,21 +56,21 @@ public class CPDFTaskInfoResult: NSObject {
         }
     }
     
-    func isFinish() -> Bool {
+    public func isFinish() -> Bool {
         guard let status = self.taskStatus else {
             return false
         }
         return status == "TaskFinish"
     }
     
-    func isRuning() -> Bool {
+    public func isRuning() -> Bool {
         guard let status = self.taskStatus else {
             return false
         }
         return status == "TaskProcessing" || status == "TaskWaiting"
     }
     
-    func printInfo() {
+    public func printInfo() {
         Swift.debugPrint(self.dict)
     }
 }

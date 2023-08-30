@@ -24,7 +24,7 @@ public class CPDFResultMap: NSObject {
         self.data = dict["data"]
     }
     
-    func isSuccess() -> Bool {
+    public func isSuccess() -> Bool {
         guard let _code = self.code else {
             return false
         }
