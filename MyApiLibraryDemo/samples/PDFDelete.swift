@@ -5,7 +5,11 @@
 //  Created by tangchao on 2023/8/17.
 //
 
+#if os(iOS)
+import Foundation
+#else
 import Cocoa
+#endif
 
 private let public_key = "x"
 private let secret_key = "x"
