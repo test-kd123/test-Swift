@@ -103,7 +103,7 @@ public class CPDFClient: NSObject {
         
     }
     
-    convenience init(publicKey: String, secretKey: String) {
+    public convenience init(publicKey: String, secretKey: String) {
         self.init()
         
         self._publicKey = publicKey
