@@ -78,7 +78,7 @@ extension CPDFClient.Data {
     static let fileInfoDTOList  = "fileInfoDTOList"
 }
 
-class CPDFClient: NSObject {
+public class CPDFClient: NSObject {
     private var _publicKey: String?
     var publicKey: String? {
         get {

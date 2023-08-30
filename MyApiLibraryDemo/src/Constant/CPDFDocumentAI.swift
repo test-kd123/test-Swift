@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFDocumentAI: NSObject {
+public class CPDFDocumentAI: NSObject {
     static let OCR              = "documentAI/ocr"
     static let MAGICCOLOR       = "documentAI/magicColor"
     static let TABLEREC         = "documentAI/tableRec"

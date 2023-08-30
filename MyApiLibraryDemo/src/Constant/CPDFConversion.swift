@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFConversion: NSObject {
+public class CPDFConversion: NSObject {
     static let PDF_TO_WORD      = "pdf/docx"
     static let PDF_TO_EXCEL     = "pdf/xlsx"
     static let PDF_TO_PPT       = "pdf/pptx"

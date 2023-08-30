@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFResultMap: NSObject {
+public class CPDFResultMap: NSObject {
     var code: String?
     var msg: String?
     var data: Any?

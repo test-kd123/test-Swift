@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFTaskInfoResult: NSObject {
+public class CPDFTaskInfoResult: NSObject {
     var taskId: String?
     var taskFileNum: Int64?
     var taskSuccessNum: Int64?

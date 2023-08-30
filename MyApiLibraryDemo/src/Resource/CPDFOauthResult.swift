@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFOauthResult: NSObject {
+public class CPDFOauthResult: NSObject {
     var tokenType: String?
     var expiresIn: String?
     var accessToken: String?

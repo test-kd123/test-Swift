@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFFileInfo: NSObject {
+public class CPDFFileInfo: NSObject {
     var fileKey: String?
     var taskId: String?
     var fileName: String?

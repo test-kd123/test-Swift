@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFDocumentEditor: NSObject {
+public class CPDFDocumentEditor: NSObject {
     static let SPLIT            = "pdf/split"
     static let MERGE            = "pdf/merge"
     static let COMPRESS         = "pdf/compress"

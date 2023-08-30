@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFHttpClient: NSObject {
+public class CPDFHttpClient: NSObject {
     private static let baseUrl = "https://api-server.compdf.com/server/"
     private static let boundary = "CPDFBoundary"
     

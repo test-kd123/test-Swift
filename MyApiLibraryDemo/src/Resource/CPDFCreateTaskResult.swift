@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFCreateTaskResult: NSObject {
+public class CPDFCreateTaskResult: NSObject {
     var taskId: String?
     var errorDesc: String?
     

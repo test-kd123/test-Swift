@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFUploadFileResult: NSObject {
+public class CPDFUploadFileResult: NSObject {
     var fileKey: String?
     var fileUrl: String?
     

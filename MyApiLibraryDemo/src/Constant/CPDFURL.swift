@@ -11,7 +11,7 @@ import Foundation
 import Cocoa
 #endif
 
-class CPDFURL: NSObject {
+public class CPDFURL: NSObject {
     static let API_V1_OAUTH_TOKEN       = "v1/oauth/token"
     static let API_V1_CREATE_TASK       = "v1/task/"
     static let API_V1_TOOL_SUPPORT      = "v1/tool/support"
