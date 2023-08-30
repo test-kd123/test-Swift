@@ -12,11 +12,11 @@ import Cocoa
 #endif
 
 public class CPDFOauthResult: NSObject {
-    var tokenType: String?
-    var expiresIn: String?
-    var accessToken: String?
-    var projectName: String?
-    var scope: String?
+    public var tokenType: String?
+    public var expiresIn: String?
+    public var accessToken: String?
+    public var projectName: String?
+    public var scope: String?
     
     convenience init(dict: [String : Any]) {
         self.init()

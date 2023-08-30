@@ -12,19 +12,19 @@ import Cocoa
 #endif
 
 public class CPDFTaskInfoResult: NSObject {
-    var taskId: String?
-    var taskFileNum: Int64?
-    var taskSuccessNum: Int64?
-    var taskFailNum: Int64?
-    var taskStatus: String?
-    var assetTypeId: Int64?
-    var taskCost: Int64?
-    var taskTime: Int64?
-    var sourceType: String?
-    var targetType: String?
-    var callbackUrl: String?
-    var taskLanguage: String?
-    var fileInfoDTOList: [CPDFFileInfo]?
+    public var taskId: String?
+    public var taskFileNum: Int64?
+    public var taskSuccessNum: Int64?
+    public var taskFailNum: Int64?
+    public var taskStatus: String?
+    public var assetTypeId: Int64?
+    public var taskCost: Int64?
+    public var taskTime: Int64?
+    public var sourceType: String?
+    public var targetType: String?
+    public var callbackUrl: String?
+    public var taskLanguage: String?
+    public var fileInfoDTOList: [CPDFFileInfo]?
     
     var errorDesc: String?
     private var dict: [String : Any] = [:]

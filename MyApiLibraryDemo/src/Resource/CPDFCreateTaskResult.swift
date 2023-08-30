@@ -12,8 +12,8 @@ import Cocoa
 #endif
 
 public class CPDFCreateTaskResult: NSObject {
-    var taskId: String?
-    var errorDesc: String?
+    public var taskId: String?
+    public var errorDesc: String?
     
     convenience init(dict: [String : Any]) {
         self.init()

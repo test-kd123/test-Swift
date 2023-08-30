@@ -12,9 +12,9 @@ import Cocoa
 #endif
 
 public class CPDFResultMap: NSObject {
-    var code: String?
-    var msg: String?
-    var data: Any?
+    public var code: String?
+    public var msg: String?
+    public var data: Any?
     
     convenience init(dict: [String : Any]) {
         self.init()

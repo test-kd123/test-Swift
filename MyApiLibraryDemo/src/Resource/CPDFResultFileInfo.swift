@@ -12,21 +12,21 @@ import Cocoa
 #endif
 
 public class CPDFFileInfo: NSObject {
-    var fileKey: String?
-    var taskId: String?
-    var fileName: String?
-    var fileUrl: String?
-    var downloadUrl: String?
-    var sourceType: String?
-    var targetType: String?
-    var fileSize: String?
-    var convertSize: String?
-    var convertTime: String?
-    var status: String?
-    var failureCode: String?
-    var failureReason: String?
-    var downFileName: String?
-    var fileParameter: String?
+    public var fileKey: String?
+    public var taskId: String?
+    public var fileName: String?
+    public var fileUrl: String?
+    public var downloadUrl: String?
+    public var sourceType: String?
+    public var targetType: String?
+    public var fileSize: String?
+    public var convertSize: String?
+    public var convertTime: String?
+    public var status: String?
+    public var failureCode: String?
+    public var failureReason: String?
+    public var downFileName: String?
+    public var fileParameter: String?
     
     convenience init(dict: [String : Any]) {
         self.init()

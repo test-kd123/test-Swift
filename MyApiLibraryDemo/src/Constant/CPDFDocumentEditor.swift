@@ -12,13 +12,13 @@ import Cocoa
 #endif
 
 public class CPDFDocumentEditor: NSObject {
-    static let SPLIT            = "pdf/split"
-    static let MERGE            = "pdf/merge"
-    static let COMPRESS         = "pdf/compress"
-    static let DELETE           = "pdf/delete"
-    static let EXTRACT          = "pdf/extract"
-    static let ROTATION         = "pdf/rotation"
-    static let INSERT           = "pdf/insert"
-    static let ADD_WATERMARK    = "pdf/addWatermark"
-    static let DEL_WATERMARK    = "pdf/delWatermark"
+    public static let SPLIT            = "pdf/split"
+    public static let MERGE            = "pdf/merge"
+    public static let COMPRESS         = "pdf/compress"
+    public static let DELETE           = "pdf/delete"
+    public static let EXTRACT          = "pdf/extract"
+    public static let ROTATION         = "pdf/rotation"
+    public static let INSERT           = "pdf/insert"
+    public static let ADD_WATERMARK    = "pdf/addWatermark"
+    public static let DEL_WATERMARK    = "pdf/delWatermark"
 }

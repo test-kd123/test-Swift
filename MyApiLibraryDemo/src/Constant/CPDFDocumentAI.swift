@@ -12,10 +12,10 @@ import Cocoa
 #endif
 
 public class CPDFDocumentAI: NSObject {
-    static let OCR              = "documentAI/ocr"
-    static let MAGICCOLOR       = "documentAI/magicColor"
-    static let TABLEREC         = "documentAI/tableRec"
-    static let LAYOUTANALYSIS   = "documentAI/layoutAnalysis"
-    static let DEWARP           = "documentAI/dewarp"
-    static let DETECTIONSTAMP   = "documentAI/detectionStamp"
+    public static let OCR              = "documentAI/ocr"
+    public static let MAGICCOLOR       = "documentAI/magicColor"
+    public static let TABLEREC         = "documentAI/tableRec"
+    public static let LAYOUTANALYSIS   = "documentAI/layoutAnalysis"
+    public static let DEWARP           = "documentAI/dewarp"
+    public static let DETECTIONSTAMP   = "documentAI/detectionStamp"
 }

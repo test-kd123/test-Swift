@@ -12,10 +12,10 @@ import Cocoa
 #endif
 
 public class CPDFUploadFileResult: NSObject {
-    var fileKey: String?
-    var fileUrl: String?
+    public var fileKey: String?
+    public var fileUrl: String?
     
-    var errorDesc: String?
+    public var errorDesc: String?
     
     convenience init(dict: [String : Any]) {
         self.init()
