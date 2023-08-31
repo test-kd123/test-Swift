@@ -50,7 +50,7 @@ public enum CPDFFileUploadParameterKey: String {
     
     case quality             = "quality"
     
-    func string() -> String {
+    public func string() -> String {
         return self.rawValue
     }
 }

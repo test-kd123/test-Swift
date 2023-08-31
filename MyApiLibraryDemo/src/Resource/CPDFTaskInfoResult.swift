@@ -26,7 +26,7 @@ public class CPDFTaskInfoResult: NSObject {
     public var taskLanguage: String?
     public var fileInfoDTOList: [CPDFFileInfo]?
     
-    var errorDesc: String?
+    public var errorDesc: String?
     private var dict: [String : Any] = [:]
     
     convenience init(dict: [String : Any]) {
