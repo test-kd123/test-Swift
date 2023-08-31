@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MyApiLibraryDemo"
-  s.version      = "0.0.9"
+  s.version      = "0.1.0"
   s.summary      = "MyApiLibraryDemo."
 
   s.description  = <<-DESC
