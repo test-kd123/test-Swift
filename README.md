@@ -14,14 +14,10 @@ Dependencies: Xcode.
 
 ## Installation
 
-Add the following dependency to your ***"pom.xml"***:
+Add the following dependency to your ***"Podfile"***:
 
 ```
-<dependency>
-    <groupId>com.compdf</groupId>
-    <artifactId>compdfkit-api-java</artifactId>
-    <version>1.2.4</version>
-</dependency>
+pod 'MyApiLibraryDemo'
 ```
 
 
@@ -35,7 +31,7 @@ You can use your **publicKey** and **secretKey** to complete the authentication.
 - Project secret Key : You can find the secret Key in [Management Panel](https://api-dashboard.compdf.com/api/keys).
 
 ```Swift
-var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 ```
 
 
@@ -46,7 +42,7 @@ A task ID is automatically generated for you based on the type of PDF tool you c
 
 ```Swift
 // Create a client
-var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
@@ -72,7 +68,7 @@ Upload the original file and bind the file to the task ID. The field parameter i
 
 ```Swift
 // Create a client
-var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
@@ -121,7 +117,7 @@ After the file upload is completed, call this interface with the task ID to proc
 
 ```Swift
 // Create a client
-var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
@@ -181,7 +177,7 @@ Request task status and file-related meta data based on the task ID.
 
 ```Swift
 // Create a client
-var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
 client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
