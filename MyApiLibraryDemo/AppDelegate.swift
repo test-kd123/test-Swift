@@ -81,6 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        TrimCorrection.asyncEntrance()
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()
+//            AddImageWatermark.asyncEntrance()
 //        DeleteWatermark.asyncEntrance()
 //            PDFCompression.asyncEntrance()
         } else {

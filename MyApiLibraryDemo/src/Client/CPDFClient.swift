@@ -49,6 +49,7 @@ public enum CPDFFileUploadParameterKey: String {
     case cpdfExtension       = "extension"
     
     case quality             = "quality"
+    case filepath            = "filepath"
     
     public func string() -> String {
         return self.rawValue
@@ -71,6 +72,8 @@ extension CPDFClient.Parameter {
     
     static let language         = "language"
     static let fileKey          = "fileKey"
+    
+    static let filepath         = "filepath"
 }
 
 extension CPDFClient.Data {
@@ -204,6 +207,10 @@ public class CPDFClient: NSObject {
         parameter[CPDFClient.Parameter.language] = language.rawValue
         if let data = password {
             parameter[CPDFClient.Parameter.password] = data
+        }
+        
+        if let type = params[CPDFFileUploadParameterKey.type.string()] as? String, type == "image" {
+            parameter[CPDFClient.Parameter.filepath] = params[CPDFFileUploadParameterKey.filepath.string()]
         }
         
         if let data = try?JSONSerialization.data(withJSONObject: params, options: .fragmentsAllowed) {

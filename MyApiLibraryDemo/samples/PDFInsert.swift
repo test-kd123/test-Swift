@@ -70,14 +70,16 @@ class PDFInsert: NSObject {
 
     @available(macOS 10.15.0, iOS 13.0, *)
     class func asyncEntrance() {
+        let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+        
         Task { @MainActor in
             // Create a task
-            let taskModel = await self.client.createTask(url: CPDFDocumentEditor.INSERT)
+            let taskModel = await client.createTask(url: CPDFDocumentEditor.INSERT)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", password: "",params: [
+            let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "",params: [
                 CPDFFileUploadParameterKey.targetPage.string() : "2",
                 CPDFFileUploadParameterKey.width.string() : "500",
                 CPDFFileUploadParameterKey.height.string() : "800",
@@ -85,9 +87,9 @@ class PDFInsert: NSObject {
             ], taskId: taskId)
             
             // execute Task
-            let _ = await self.client.processFiles(taskId: taskId)
+            let _ = await client.processFiles(taskId: taskId)
             // get task processing information
-            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId)
+            let taskInfoModel = await client.getTaskInfo(taskId: taskId)
             guard let _model = taskInfoModel else {
                 Swift.debugPrint("error:....")
                 return
@@ -96,7 +98,7 @@ class PDFInsert: NSObject {
                 _model.printInfo()
             } else if (_model.isRuning()) {
                 Swift.debugPrint("Task incomplete processing")
-                self.client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
+                client.getTaskInfoComplete(taskId: taskId) { isFinish, params in
                     Swift.debugPrint(params)
                 }
             } else {

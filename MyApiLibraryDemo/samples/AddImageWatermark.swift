@@ -1,9 +1,11 @@
 //
-//  PDFToJPG.swift
+//  AddImageWatermark.swift
 //  MyApiLibraryDemo
 //
-//  Created by tangchao on 2023/8/21.
+//  Created by tangchao on 2023/9/4.
 //
+
+import Foundation
 
 #if os(iOS)
 import Foundation
@@ -13,12 +15,12 @@ import Cocoa
 
 private let public_key = "x"
 private let secret_key = "x"
-class PDFToJPG: NSObject {
+class AddImageWatermark: NSObject {
     private static var client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
     
     class func entrance() {
         // Create a task
-        self.client.createTask(url: CPDFConversion.PDF_TO_JPG) { taskModel in
+        self.client.createTask(url: CPDFDocumentEditor.ADD_WATERMARK) { taskModel in
             guard let taskId = taskModel?.taskId else {
                 Swift.debugPrint(taskModel?.errorDesc ?? "")
                 return
@@ -27,8 +29,23 @@ class PDFToJPG: NSObject {
             // upload File
             let group = DispatchGroup()
             group.enter()
-            let path = Bundle.main.path(forResource: "IMG_00001(2)", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "", params: [CPDFFileUploadParameterKey.imgDpi.string() : "300"], taskId: taskId) { uploadFileModel in
+            let path = Bundle.main.path(forResource: "test", ofType: "pdf")
+            self.client.uploadFile(filepath: path!, password: "", params: [
+                CPDFFileUploadParameterKey.textColor.string():"#59c5bb",
+                CPDFFileUploadParameterKey.type.string():"text",
+                CPDFFileUploadParameterKey.content.string():"text",
+                CPDFFileUploadParameterKey.scale.string():"1",
+                CPDFFileUploadParameterKey.opacity.string():"0.5",
+                CPDFFileUploadParameterKey.rotation.string():"0.785",
+                CPDFFileUploadParameterKey.targetPages.string():"1-2",
+                CPDFFileUploadParameterKey.vertalign.string():"center",
+                CPDFFileUploadParameterKey.horizalign.string():"left",
+                CPDFFileUploadParameterKey.xoffset.string():"100",
+                CPDFFileUploadParameterKey.yoffset.string():"100",
+                CPDFFileUploadParameterKey.fullScreen.string():"1",
+                CPDFFileUploadParameterKey.horizontalSpace.string():"10",
+                CPDFFileUploadParameterKey.verticalSpace.string():"10"
+            ], taskId: taskId) { uploadFileModel in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
@@ -69,13 +86,25 @@ class PDFToJPG: NSObject {
         
         Task { @MainActor in
             // Create a task
-            let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_JPG)
+            let taskModel = await client.createTask(url: CPDFDocumentEditor.ADD_WATERMARK)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await client.uploadFile(filepath: path ?? "",  password: "",params: [
-                CPDFFileUploadParameterKey.imgDpi.string() : "300"
+            let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", params: [
+                CPDFFileUploadParameterKey.type.string():"image",
+                CPDFFileUploadParameterKey.filepath.string() : Bundle.main.path(forResource: "test", ofType: "jpg")!,
+                CPDFFileUploadParameterKey.scale.string():"0.5",
+                CPDFFileUploadParameterKey.opacity.string():"0.5",
+                CPDFFileUploadParameterKey.rotation.string():"45",
+                CPDFFileUploadParameterKey.targetPages.string():"1-2",
+                CPDFFileUploadParameterKey.vertalign.string():"center",
+                CPDFFileUploadParameterKey.horizalign.string():"left",
+                CPDFFileUploadParameterKey.xoffset.string():"50",
+                CPDFFileUploadParameterKey.yoffset.string():"50",
+                CPDFFileUploadParameterKey.fullScreen.string():"1",
+                CPDFFileUploadParameterKey.horizontalSpace.string():"100",
+                CPDFFileUploadParameterKey.verticalSpace.string():"100"
             ], taskId: taskId)
             
             // execute Task

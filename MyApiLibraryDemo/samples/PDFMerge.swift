@@ -72,9 +72,9 @@ class PDFMerge: NSObject {
     
     @available(macOS 10.15.0, iOS 13.0, *)
     class func asyncEntrance() {
+        let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
+        
         Task { @MainActor in
-            let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
-            
             //Create a task
             let taskModel = await client.createTask(url: CPDFDocumentEditor.MERGE, language: .english)
             let taskId = taskModel?.taskId ?? ""

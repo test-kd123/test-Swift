@@ -35,6 +35,7 @@
 		BB414F402A8DFB0100D30617 /* PDFDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB414F3F2A8DFB0100D30617 /* PDFDelete.swift */; };
 		BB414F422A8E03D600D30617 /* CPDFURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB414F412A8E03D600D30617 /* CPDFURL.swift */; };
 		BB414F442A8E04E100D30617 /* CPDFDocumentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB414F432A8E04E100D30617 /* CPDFDocumentEditor.swift */; };
+		BB5FA0C52AA5DC68004FFAF0 /* AddImageWatermark.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5FA0C42AA5DC68004FFAF0 /* AddImageWatermark.swift */; };
 		BB600F152A9442D800026A2D /* LayoutAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB600F142A9442D800026A2D /* LayoutAnalysis.swift */; };
 		BB600F172A9443C300026A2D /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BB600F162A9443C300026A2D /* test.jpg */; };
 		BB600F192A94449F00026A2D /* ImageSharpeningEnhancement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB600F182A94449F00026A2D /* ImageSharpeningEnhancement.swift */; };
@@ -105,6 +106,7 @@
 		BB414F3F2A8DFB0100D30617 /* PDFDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFDelete.swift; sourceTree = "<group>"; };
 		BB414F412A8E03D600D30617 /* CPDFURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFURL.swift; sourceTree = "<group>"; };
 		BB414F432A8E04E100D30617 /* CPDFDocumentEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPDFDocumentEditor.swift; sourceTree = "<group>"; };
+		BB5FA0C42AA5DC68004FFAF0 /* AddImageWatermark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageWatermark.swift; sourceTree = "<group>"; };
 		BB600F142A9442D800026A2D /* LayoutAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutAnalysis.swift; sourceTree = "<group>"; };
 		BB600F162A9443C300026A2D /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		BB600F182A94449F00026A2D /* ImageSharpeningEnhancement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSharpeningEnhancement.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				BB600F1E2A944B2500026A2D /* TrimCorrection.swift */,
 				BB600F202A94502600026A2D /* StampInspection.swift */,
 				BB600F222A9450FA00026A2D /* AddWatermark.swift */,
+				BB5FA0C42AA5DC68004FFAF0 /* AddImageWatermark.swift */,
 				BB600F242A94574600026A2D /* DeleteWatermark.swift */,
 				BB600F262A94584E00026A2D /* PDFCompression.swift */,
 			);
@@ -430,6 +433,7 @@
 				BB2E88802A9342A400BF5DC7 /* PDFSplit.swift in Sources */,
 				BB414F1E2A8DF41700D30617 /* AppDelegate.swift in Sources */,
 				BB414F442A8E04E100D30617 /* CPDFDocumentEditor.swift in Sources */,
+				BB5FA0C52AA5DC68004FFAF0 /* AddImageWatermark.swift in Sources */,
 				BB600F1B2A94455400026A2D /* FormRecognizer.swift in Sources */,
 				BB600F312A94687400026A2D /* PNGToPDF.swift in Sources */,
 				BB600F332A94692700026A2D /* TXTToPDF.swift in Sources */,

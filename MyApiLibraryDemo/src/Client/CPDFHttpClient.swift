@@ -130,14 +130,19 @@ public class CPDFHttpClient: NSObject {
         request.setValue("multipart/form-data; boundary=\(self.boundary)", forHTTPHeaderField: "Content-Type")
         
         var bodyString = ""
+        var imageFilepath = ""
         if let data = parameter {
             for (key,value) in data {
                 bodyString.append("--\(self.boundary)\r\n")
                 if (value is String) {
-                    bodyString.append("Content-disposition: form-data; name=\"\(key)\"")
-                    bodyString.append("\r\n\r\n")
-                    bodyString.append(value as! String)
-                    bodyString.append("\r\n")
+                    if (key == "filepath") {
+                        imageFilepath = value as! String
+                    } else {
+                        bodyString.append("Content-disposition: form-data; name=\"\(key)\"")
+                        bodyString.append("\r\n\r\n")
+                        bodyString.append(value as! String)
+                        bodyString.append("\r\n")
+                    }
                 } else {
                     // no things
                 }
@@ -158,6 +163,25 @@ public class CPDFHttpClient: NSObject {
         }
         
         mdata.append("\r\n".data(using: .utf8)!)
+        
+        if (!imageFilepath.isEmpty) {
+            var dataString = ""
+            
+            let fileUrl = URL(fileURLWithPath: imageFilepath)
+            dataString.append("--\(self.boundary)\r\n")
+            dataString.append("Content-disposition: form-data; name=\"image\"; filename=\"\(fileUrl.lastPathComponent)\"")
+            dataString.append("\r\n")
+            dataString.append("Content-Type: application/octet-stream")
+            dataString.append("\r\n\r\n")
+//            var mdata = Data()
+            mdata.append(dataString.data(using: .utf8)!)
+            if let data = try?Data(contentsOf: fileUrl) {
+                mdata.append(data)
+            }
+            
+            mdata.append("\r\n".data(using: .utf8)!)
+        }
+        
         mdata.append("--\(self.boundary)--".data(using: .utf8)!)
         
         let session = URLSession.shared

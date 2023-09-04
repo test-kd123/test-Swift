@@ -73,6 +73,8 @@ class PDFToWord: NSObject {
         let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
         
         Task { @MainActor in
+            
+            let fileInfo = await client.getTaskList(page: 1, size: 10)
             // Create a task
             let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
             let taskId = taskModel?.taskId ?? ""
