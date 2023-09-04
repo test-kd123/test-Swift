@@ -469,4 +469,29 @@ extension CPDFClient {
         })
     }
     
+    public func getTaskList(page: Int64, size: Int64, callback:@escaping (([Any]?)->Void)) {
+        if (!self.accessTokenIsValid()) {
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    callback(nil)
+                    return
+                }
+                self?.getTaskList(page: page, size: size,callback: callback)
+            }
+            return
+        }
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_LIST, headers: self.getRequestHeaderInfo()) { reslut , dataDict, error in
+            callback(dataDict?["records"] as? [Any])
+        }
+    }
+    
+    @available(macOS 10.15.0, iOS 13.0, *)
+    public func getTaskList(page: Int64 = 1, size: Int64 = 10) async -> [Any]? {
+        return await withCheckedContinuation({ continuation in
+            self.getTaskList(page: page, size: size, callback: { datas in
+                continuation.resume(returning: datas)
+            })
+        })
+    }
+    
 }
