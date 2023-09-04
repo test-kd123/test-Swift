@@ -55,7 +55,20 @@ public class CPDFHttpClient: NSObject {
                 }
                 if let result = self.JsonDataParse(data: _data) {
                     let resultMap = CPDFResultMap(dict: result)
-                    callback(resultMap.isSuccess(), resultMap.data as? [String : Any], error.debugDescription)
+                    var dataDict: [String : Any] = [:]
+                    if let data = resultMap.data as? [String : Any] {
+                        dataDict = data
+                    } else {
+                        if let dataArray = resultMap.data as? [Any] {
+                            var i = 0
+                            for dict in dataArray {
+                                dataDict["\(i)"] = dict
+                                i += 1
+                            }
+                        }
+                    }
+
+                    callback(resultMap.isSuccess(), dataDict, error.debugDescription)
                     return
                 }
                 callback(false, nil, error.debugDescription)

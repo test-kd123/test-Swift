@@ -231,7 +231,7 @@ public class CPDFClient: NSObject {
         })
     }
     
-    public func resumeTask(taskId: String, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
+    public func resumeTask(taskId: String, language: CPDFClientLanguage = .chinese, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -240,19 +240,19 @@ public class CPDFClient: NSObject {
                     callback(_model)
                     return
                 }
-                self?.resumeTask(taskId: taskId, callback: callback)
+                self?.resumeTask(taskId: taskId, language: language, callback: callback)
             }
             return
         }
         
-        self.processFiles(taskId: taskId) { [weak self] model in
+        self.processFiles(taskId: taskId, language: language) { [weak self] model in
             guard let _ = model?.taskId else {
                 let _model = CPDFTaskInfoResult()
                 _model.errorDesc = "Process Files failure"
                 callback(_model)
                 return
             }
-            self?.getTaskInfo(taskId: taskId, callback: callback)
+            self?.getTaskInfo(taskId: taskId, language: language, callback: callback)
         }
     }
     
@@ -294,24 +294,25 @@ public class CPDFClient: NSObject {
         })
     }
     
-    public func getTaskInfoComplete(taskId: String, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
+    public func getTaskInfoComplete(taskId: String, language: CPDFClientLanguage = .chinese, callback:@escaping ((_ isFinish: Bool, _ params: Any...)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] accessToken in
                 guard let _ = accessToken else {
                     callback(false, "auth failure")
                     return
                 }
-                self?.getTaskInfoComplete(taskId: taskId, callback: callback)
+                self?.getTaskInfoComplete(taskId: taskId, language: language, callback: callback)
             }
             return
         }
         
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
+        parameter[CPDFClient.Parameter.language] = language.rawValue
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, (data.elementsEqual("TaskProcessing") || data.elementsEqual("TaskWaiting")) {
                 sleep(5)
-                self.getTaskInfoComplete(taskId: taskId, callback: callback)
+                self.getTaskInfoComplete(taskId: taskId, language: language, callback: callback)
                 return
             }
             var isFinish = false
@@ -376,5 +377,28 @@ public class CPDFClient: NSObject {
             headers["Authorization"] = "Bearer \(data)"
         }
         return headers
+    }
+}
+
+extension CPDFClient {
+    public func getSupportTools(callback:@escaping (([Any]?)->Void)) {
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TOOL_SUPPORT, headers: self.getRequestHeaderInfo()) { reslut , dataDict, error in
+            var array: [Any] = []
+            if let _dataDict = dataDict {
+                for dict in _dataDict {
+                    array.append(dict)
+                }
+            }
+            callback(array)
+        }
+    }
+    
+    @available(macOS 10.15.0, iOS 13.0, *)
+    public func getSupportTools() async -> [Any]? {
+        return await withCheckedContinuation({ continuation in
+            self.getSupportTools(callback: { datas in
+                continuation.resume(returning: datas)
+            })
+        })
     }
 }
