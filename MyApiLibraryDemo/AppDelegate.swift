@@ -51,13 +51,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        PDFCompression.entrance()
         
         if #available(macOS 10.15, iOS 13.0, *) {
-//            PDFDelete.asyncEntrance()
+            PDFDelete.asyncEntrance()
 //            PDFMerge.asyncEntrance()
 //            PDFSplit.asyncEntrance()
 //        PDFRotation.asyncEntrance()
 //        PDFInsert.asyncEntrance()
 //        PDFExtract.asyncEntrance()
-        PDFToWord.asyncEntrance()
+//        PDFToWord.asyncEntrance()
 //        PDFToExcel.asyncEntrance()
 //        PDFToPPT.asyncEntrance()
 //        PDFToHTML.asyncEntrance()

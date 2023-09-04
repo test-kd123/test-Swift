@@ -72,5 +72,14 @@ public class CPDFTaskInfoResult: NSObject {
     
     public func printInfo() {
         Swift.debugPrint(self.dict)
+        
+        if let file = self.fileInfoDTOList?.first {
+            if let downloadUrl = file.downloadUrl, !downloadUrl.isEmpty {
+                Swift.debugPrint("downloadUrl: "+downloadUrl)
+            }
+            if let failureReason = file.failureReason, !failureReason.isEmpty {
+                Swift.debugPrint("failureReason: "+failureReason)
+            }
+        }
     }
 }

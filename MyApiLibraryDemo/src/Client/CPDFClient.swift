@@ -298,6 +298,7 @@ public class CPDFClient: NSObject {
         parameter[CPDFClient.Parameter.taskId] = taskId
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             if let data = dataDict?[CPDFClient.Data.taskStatus] as? String, (data.elementsEqual("TaskProcessing") || data.elementsEqual("TaskWaiting")) {
+                sleep(5)
                 self.getTaskInfoComplete(taskId: taskId, callback: callback)
                 return
             }
