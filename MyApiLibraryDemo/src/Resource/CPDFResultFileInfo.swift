@@ -28,9 +28,13 @@ public class CPDFFileInfo: NSObject {
     public var downFileName: String?
     public var fileParameter: String?
     
+    public var errorDesc: String?
+    private var dict: [String : Any]?
+    
     convenience init(dict: [String : Any]) {
         self.init()
         
+        self.dict = dict
         self.fileUrl        = dict["fileUrl"] as? String
         self.taskId         = dict["taskId"] as? String
         self.fileName       = dict["fileName"] as? String
@@ -46,5 +50,9 @@ public class CPDFFileInfo: NSObject {
         self.failureReason  = dict["failureReason"] as? String
         self.downFileName   = dict["downFileName"] as? String
         self.fileParameter  = dict["fileParameter"] as? String
+    }
+    
+    public func printInfo() {
+        Swift.debugPrint(self.dict ?? [:])
     }
 }

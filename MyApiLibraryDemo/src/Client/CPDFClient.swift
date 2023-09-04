@@ -70,6 +70,7 @@ extension CPDFClient.Parameter {
     static let file             = "file"
     
     static let language         = "language"
+    static let fileKey          = "fileKey"
 }
 
 extension CPDFClient.Data {
@@ -399,6 +400,41 @@ extension CPDFClient {
             self.getSupportTools(callback: { datas in
                 continuation.resume(returning: datas)
             })
+        })
+    }
+    
+    public func getFileInfoByKey(fileKey: String, callback:@escaping ((CPDFFileInfo?)->Void)) {
+        if (!self.accessTokenIsValid()) {
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    let _model = CPDFFileInfo()
+                    _model.errorDesc = "auth failure"
+                    callback(_model)
+                    return
+                }
+                self?.getFileInfoByKey(fileKey: fileKey, callback: callback)
+            }
+            return
+        }
+        
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_FILE_INFO, parameter: [CPDFClient.Parameter.fileKey : fileKey], headers: self.getRequestHeaderInfo()) { result, dataDict, error in
+            guard let _dataDict = dataDict else {
+                let model = CPDFFileInfo(dict: [:])
+                model.errorDesc = error
+                callback(model)
+                return
+            }
+            let model = CPDFFileInfo(dict: _dataDict)
+            callback(model)
+        }
+    }
+    
+    @available(macOS 10.15.0, iOS 13.0, *)
+    public func getFileInfoByKey(fileKey: String) async -> CPDFFileInfo? {
+        return await withCheckedContinuation({ continuation in
+            self.getFileInfoByKey(fileKey: fileKey) { model in
+                continuation.resume(returning: model)
+            }
         })
     }
 }
