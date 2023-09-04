@@ -11,15 +11,15 @@ import Foundation
 import Cocoa
 #endif
 
-private let public_key = "x"
-private let secret_key = "x"
+private let public_key = "public_key_923a61e724db57c4f6706660a8121e6a"
+private let secret_key = "secret_key_a3fd33db0ca1901688bd1582df08ac70"
 class PDFToWord: NSObject {
     
     class func entrance() {
         let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
         
         // Create a task
-        client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
+        client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english) { taskModel in
             guard let taskId = taskModel?.taskId else {
                 Swift.debugPrint(taskModel?.errorDesc ?? "")
                 return
@@ -29,7 +29,7 @@ class PDFToWord: NSObject {
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            client.uploadFile(filepath: path!, password: "", params: [
+            client.uploadFile(filepath: path!, password: "", language: .english, params: [
                 CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
                 CPDFFileUploadParameterKey.isContainImg.string() : "1",
                 CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
@@ -42,12 +42,12 @@ class PDFToWord: NSObject {
             
             group.notify(queue: .main) {
                 // execute Task
-                client.processFiles(taskId: taskId) { processFileModel in
+                client.processFiles(taskId: taskId, language: .english) { processFileModel in
                     if let errorInfo = processFileModel?.errorDesc {
                         Swift.debugPrint(errorInfo)
                     }
                     // get task processing information
-                    client.getTaskInfo(taskId: taskId) { taskInfoModel in
+                    client.getTaskInfo(taskId: taskId, language: .english) { taskInfoModel in
                         guard let _model = taskInfoModel else {
                             Swift.debugPrint("error:....")
                             return
@@ -74,21 +74,21 @@ class PDFToWord: NSObject {
         
         Task { @MainActor in
             // Create a task
-            let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD)
+            let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", params: [
+            let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", language: .english, params: [
                 CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
                 CPDFFileUploadParameterKey.isContainImg.string() : "1",
                 CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
             ], taskId: taskId)
 
             // execute Task
-            let _ = await client.processFiles(taskId: taskId)
+            let _ = await client.processFiles(taskId: taskId, language: .english)
             // get task processing information
-            let taskInfoModel = await client.getTaskInfo(taskId: taskId)
+            let taskInfoModel = await client.getTaskInfo(taskId: taskId, language: .english)
             guard let _model = taskInfoModel else {
                 Swift.debugPrint("error:....")
                 return

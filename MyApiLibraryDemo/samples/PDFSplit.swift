@@ -18,7 +18,7 @@ class PDFSplit: NSObject {
     
     class func entrance() {
         //Create a task
-        self.client.createTask(url: CPDFDocumentEditor.SPLIT) { taskModel in
+        self.client.createTask(url: CPDFDocumentEditor.SPLIT, language: .english) { taskModel in
             guard let taskId = taskModel?.taskId else {
                 Swift.debugPrint(taskModel?.errorDesc ?? "")
                 return
@@ -28,7 +28,7 @@ class PDFSplit: NSObject {
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            self.client.uploadFile(filepath: path!, password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1-3"]], taskId: taskId) { uploadFileModel in
+            self.client.uploadFile(filepath: path!, password: "", language: .english, params: [CPDFFileUploadParameterKey.pageOptions.string():["1-3"]], taskId: taskId) { uploadFileModel in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
@@ -37,12 +37,12 @@ class PDFSplit: NSObject {
             
             group.notify(queue: .main) {
                 // execute Task
-                self.client.processFiles(taskId: taskId) { processFileModel in
+                self.client.processFiles(taskId: taskId, language: .english) { processFileModel in
                     if let errorInfo = processFileModel?.errorDesc {
                         Swift.debugPrint(errorInfo)
                     }
                     // get task processing information
-                    self.client.getTaskInfo(taskId: taskId) { taskInfoModel in
+                    self.client.getTaskInfo(taskId: taskId, language: .english) { taskInfoModel in
                         guard let _model = taskInfoModel else {
                             Swift.debugPrint("error:....")
                             return
@@ -67,17 +67,17 @@ class PDFSplit: NSObject {
     class func asyncEntrance() {
         Task { @MainActor in
             //Create a task
-            let taskModel = await self.client.createTask(url: CPDFDocumentEditor.SPLIT)
+            let taskModel = await self.client.createTask(url: CPDFDocumentEditor.SPLIT, language: .english)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", password: "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1-2"]], taskId: taskId)
+            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", password: "", language: .english, params: [CPDFFileUploadParameterKey.pageOptions.string():["1-2"]], taskId: taskId)
             
             // execute Task
-            let _ = await self.client.processFiles(taskId: taskId)
+            let _ = await self.client.processFiles(taskId: taskId, language: .english)
             // get task processing information
-            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId)
+            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId, language: .english)
             guard let _model = taskInfoModel else {
                 Swift.debugPrint("error:....")
                 return

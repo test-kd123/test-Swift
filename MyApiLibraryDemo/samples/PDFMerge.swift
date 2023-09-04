@@ -18,7 +18,7 @@ class PDFMerge: NSObject {
         let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
         
         //Create a task
-        client.createTask(url: CPDFDocumentEditor.MERGE) { taskModel in
+        client.createTask(url: CPDFDocumentEditor.MERGE, language: .english) { taskModel in
             guard let taskId = taskModel?.taskId else {
                 Swift.debugPrint(taskModel?.errorDesc ?? "")
                 return
@@ -28,14 +28,14 @@ class PDFMerge: NSObject {
             let group = DispatchGroup()
             group.enter()
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            client.uploadFile(filepath: path!, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
+            client.uploadFile(filepath: path!, language: .english, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
                 group.leave()
             }
             group.enter()
-            client.uploadFile(filepath: path!, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
+            client.uploadFile(filepath: path!, language: .english, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId) { uploadFileModel  in
                 if let errorInfo = uploadFileModel?.errorDesc {
                     Swift.debugPrint(errorInfo)
                 }
@@ -44,12 +44,12 @@ class PDFMerge: NSObject {
             
             group.notify(queue: .main) {
                 // execute Task
-                client.processFiles(taskId: taskId) { processFileModel in
+                client.processFiles(taskId: taskId, language: .english) { processFileModel in
                     if let errorInfo = processFileModel?.errorDesc {
                         Swift.debugPrint(errorInfo)
                     }
                     // get task processing information
-                    client.getTaskInfo(taskId: taskId) { taskInfoModel in
+                    client.getTaskInfo(taskId: taskId, language: .english) { taskInfoModel in
                         guard let _model = taskInfoModel else {
                             Swift.debugPrint("error:....")
                             return
@@ -76,18 +76,18 @@ class PDFMerge: NSObject {
             let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
             
             //Create a task
-            let taskModel = await client.createTask(url: CPDFDocumentEditor.MERGE)
+            let taskModel = await client.createTask(url: CPDFDocumentEditor.MERGE, language: .english)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-            let uploadFileModel = await client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
-            let uploadFileModel2 = await client.uploadFile(filepath: path ?? "", params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
+            let uploadFileModel = await client.uploadFile(filepath: path ?? "", language: .english, params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
+            let uploadFileModel2 = await client.uploadFile(filepath: path ?? "",language: .english ,params: [CPDFFileUploadParameterKey.pageOptions.string():["1,2"]], taskId: taskId)
             
             // execute Task
-            let _ = await client.processFiles(taskId: taskId)
+            let _ = await client.processFiles(taskId: taskId, language: .english)
             // get task processing information
-            let taskInfoModel = await client.getTaskInfo(taskId: taskId)
+            let taskInfoModel = await client.getTaskInfo(taskId: taskId, language: .english)
             guard let _model = taskInfoModel else {
                 Swift.debugPrint("error:....")
                 return
