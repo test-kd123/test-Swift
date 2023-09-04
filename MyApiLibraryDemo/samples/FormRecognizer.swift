@@ -85,17 +85,17 @@ class FormRecognizer: NSObject {
     class func asyncEntrance() {
         Task { @MainActor in
             // Create a task
-            let taskModel = await self.client.createTask(url: CPDFDocumentAI.TABLEREC)
+            let taskModel = await self.client.createTask(url: CPDFDocumentAI.TABLEREC, language: .english)
             let taskId = taskModel?.taskId ?? ""
 
             // upload File
             let path = Bundle.main.path(forResource: "IMG_00001(2)", ofType: "jpg")
-            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", params: [:], taskId: taskId)
+            let uploadFileModel = await self.client.uploadFile(filepath: path ?? "", language: .english, params: [:], taskId: taskId)
             
             // execute Task
-            let _ = await self.client.processFiles(taskId: taskId)
+            let _ = await self.client.processFiles(taskId: taskId, language: .english)
             // get task processing information
-            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId)
+            let taskInfoModel = await self.client.getTaskInfo(taskId: taskId, language: .english)
             guard let _model = taskInfoModel else {
                 Swift.debugPrint("error:....")
                 return

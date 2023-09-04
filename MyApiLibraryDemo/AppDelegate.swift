@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        PDFCompression.entrance()
         
         if #available(macOS 10.15, iOS 13.0, *) {
-            PDFDelete.asyncEntrance()
+//            PDFDelete.asyncEntrance()
 //            PDFMerge.asyncEntrance()
 //            PDFSplit.asyncEntrance()
 //        PDFRotation.asyncEntrance()
@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        OCR.asyncEntrance()
 //        LayoutAnalysis.asyncEntrance()
 //        ImageSharpeningEnhancement.asyncEntrance()
-//        FormRecognizer.asyncEntrance()
+        FormRecognizer.asyncEntrance()
 //        TrimCorrection.asyncEntrance()
 //        StampInspection.asyncEntrance()
 //        AddWatermark.asyncEntrance()

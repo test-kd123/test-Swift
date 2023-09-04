@@ -55,6 +55,11 @@ public enum CPDFFileUploadParameterKey: String {
     }
 }
 
+public enum CPDFClientLanguage: String {
+    case english        = "1"
+    case chinese        = "2"
+}
+
 extension CPDFClient.Parameter {
     static let publicKey        = "publicKey"
     static let secretKey        = "secretKey"
@@ -63,6 +68,8 @@ extension CPDFClient.Parameter {
     static let password         = "password"
     static let parameter        = "parameter"
     static let file             = "file"
+    
+    static let language         = "language"
 }
 
 extension CPDFClient.Data {
@@ -110,7 +117,7 @@ public class CPDFClient: NSObject {
         self._secretKey = secretKey
     }
     
-    public func createTask(url: String, callback:@escaping (CPDFCreateTaskResult?)->Void) {
+    public func createTask(url: String, language: CPDFClientLanguage = .chinese, callback:@escaping (CPDFCreateTaskResult?)->Void) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -120,12 +127,15 @@ public class CPDFClient: NSObject {
                     return
                 }
                 
-                self?.createTask(url: url, callback: callback)
+                self?.createTask(url: url, language: language, callback: callback)
             }
             return
         }
         
-        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_CREATE_TASK+url, headers: self.getRequestHeaderInfo()) { result, dataDict, error in
+        var parameter: [String : String] = [:]
+        parameter[CPDFClient.Parameter.language] = language.rawValue
+
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_CREATE_TASK+url, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict, error in
             guard let _dataDict = dataDict else {
                 let model = CPDFCreateTaskResult(dict: [:])
                 model.errorDesc = error
@@ -138,9 +148,9 @@ public class CPDFClient: NSObject {
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func createTask(url: String) async -> CPDFCreateTaskResult? {
+    public func createTask(url: String, language: CPDFClientLanguage = .chinese) async -> CPDFCreateTaskResult? {
         return await withCheckedContinuation({ continuation in
-            self.createTask(url: url) { model in
+            self.createTask(url: url, language: language) { model in
                 continuation.resume(returning: model)
             }
         })
@@ -173,7 +183,7 @@ public class CPDFClient: NSObject {
         })
     }
     
-    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String, callback:@escaping ((CPDFUploadFileResult?)->Void)) {
+    public func uploadFile(filepath: String, password: String? = nil, language: CPDFClientLanguage = .chinese, params:[String : Any], taskId: String, callback:@escaping ((CPDFUploadFileResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -183,13 +193,14 @@ public class CPDFClient: NSObject {
                     return
                 }
                 
-                self?.uploadFile(filepath: filepath, params: params, taskId: taskId, callback: callback)
+                self?.uploadFile(filepath: filepath, language: language, params: params, taskId: taskId, callback: callback)
             }
             return
         }
         
         var parameter: [String : Any] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
+        parameter[CPDFClient.Parameter.language] = language.rawValue
         if let data = password {
             parameter[CPDFClient.Parameter.password] = data
         }
@@ -212,9 +223,9 @@ public class CPDFClient: NSObject {
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func uploadFile(filepath: String, password: String? = nil, params:[String : Any], taskId: String) async ->CPDFUploadFileResult? {
+    public func uploadFile(filepath: String, password: String? = nil, language: CPDFClientLanguage = .chinese, params:[String : Any], taskId: String) async ->CPDFUploadFileResult? {
         return await withCheckedContinuation({ continuation in
-            self.uploadFile(filepath: filepath, password: password, params: params, taskId: taskId) { model in
+            self.uploadFile(filepath: filepath, password: password, language: language, params: params, taskId: taskId) { model in
                 continuation.resume(returning: model)
             }
         })
@@ -245,7 +256,7 @@ public class CPDFClient: NSObject {
         }
     }
     
-    public func processFiles(taskId: String, callback:@escaping ((CPDFCreateTaskResult?)->Void)) {
+    public func processFiles(taskId: String, language: CPDFClientLanguage = .chinese, callback:@escaping ((CPDFCreateTaskResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -254,13 +265,14 @@ public class CPDFClient: NSObject {
                     callback(_model)
                     return
                 }
-                self?.processFiles(taskId: taskId, callback: callback)
+                self?.processFiles(taskId: taskId, language: language, callback: callback)
             }
             return
         }
         
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
+        parameter[CPDFClient.Parameter.language] = language.rawValue
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_EXECUTE_TASK, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             guard let _dataDict = dataDict else {
                 let model = CPDFCreateTaskResult(dict: [:])
@@ -274,9 +286,9 @@ public class CPDFClient: NSObject {
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func processFiles(taskId: String) async -> CPDFCreateTaskResult? {
+    public func processFiles(taskId: String, language: CPDFClientLanguage = .chinese) async -> CPDFCreateTaskResult? {
         return await withCheckedContinuation({ continuation in
-            self.processFiles(taskId: taskId) { model in
+            self.processFiles(taskId: taskId, language: language) { model in
                 continuation.resume(returning: model)
             }
         })
@@ -310,7 +322,7 @@ public class CPDFClient: NSObject {
         }
     }
     
-    public func getTaskInfo(taskId: String, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
+    public func getTaskInfo(taskId: String, language: CPDFClientLanguage = .chinese, callback:@escaping ((CPDFTaskInfoResult?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -319,13 +331,14 @@ public class CPDFClient: NSObject {
                     callback(_model)
                     return
                 }
-                self?.getTaskInfo(taskId: taskId, callback: callback)
+                self?.getTaskInfo(taskId: taskId, language: language, callback: callback)
             }
             return
         }
         
         var parameter: [String : String] = [:]
         parameter[CPDFClient.Parameter.taskId] = taskId
+        parameter[CPDFClient.Parameter.language] = language.rawValue
         CPDFHttpClient.GET(urlString: CPDFURL.API_V1_TASK_INFO, parameter: parameter, headers: self.getRequestHeaderInfo()) { result, dataDict , error in
             guard let _dataDict = dataDict else {
                 let model = CPDFTaskInfoResult(dict: [:])
@@ -339,9 +352,9 @@ public class CPDFClient: NSObject {
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func getTaskInfo(taskId: String) async -> CPDFTaskInfoResult? {
+    public func getTaskInfo(taskId: String, language: CPDFClientLanguage = .chinese) async -> CPDFTaskInfoResult? {
         return await withCheckedContinuation({ continuation in
-            self.getTaskInfo(taskId: taskId) { model in
+            self.getTaskInfo(taskId: taskId, language: language) { model in
                 continuation.resume(returning: model)
             }
         })
