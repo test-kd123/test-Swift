@@ -45,7 +45,7 @@ A task ID is automatically generated for you based on the type of PDF tool you c
 let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
-client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
+client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english) { taskModel in
     guard let taskId = taskModel?.taskId else {
         Swift.debugPrint(taskModel?.errorDesc ?? "")
         return
@@ -58,7 +58,7 @@ let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 
 Task { @MainActor in
     // Create a task
-    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD)
+    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
     let taskId = taskModel?.taskId ?? ""
 }
 ```
@@ -74,7 +74,7 @@ Upload the original file and bind the file to the task ID. The field parameter i
 let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
-client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
+client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english) { taskModel in
     guard let taskId = taskModel?.taskId else {
         Swift.debugPrint(taskModel?.errorDesc ?? "")
         return
@@ -84,7 +84,7 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
     let group = DispatchGroup()
     group.enter()
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    client.uploadFile(filepath: path!, password: "", params: [
+    client.uploadFile(filepath: path!, password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
@@ -102,12 +102,12 @@ let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 
 Task { @MainActor in
     // Create a task
-    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD)
+    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
     let taskId = taskModel?.taskId ?? ""
 
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", params: [
+    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
@@ -126,7 +126,7 @@ After the file upload is completed, call this interface with the task ID to proc
 let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
-client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
+client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english) { taskModel in
     guard let taskId = taskModel?.taskId else {
         Swift.debugPrint(taskModel?.errorDesc ?? "")
         return
@@ -136,7 +136,7 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
     let group = DispatchGroup()
     group.enter()
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    client.uploadFile(filepath: path!, password: "", params: [
+    client.uploadFile(filepath: path!, password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
@@ -149,7 +149,7 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
             
     group.notify(queue: .main) {
         // execute Task
-        client.processFiles(taskId: taskId) { processFileModel in
+        client.processFiles(taskId: taskId, language: .english) { processFileModel in
             if let errorInfo = processFileModel?.errorDesc {
                 Swift.debugPrint(errorInfo)
             }
@@ -163,19 +163,19 @@ let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 
 Task { @MainActor in
     // Create a task
-    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD)
+    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
     let taskId = taskModel?.taskId ?? ""
 
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", params: [
+    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
     ], taskId: taskId)
     
     // execute Task
-    let _ = await client.processFiles(taskId: taskId)
+    let _ = await client.processFiles(taskId: taskId, language: .english)
 }
 ```
 
@@ -189,7 +189,7 @@ Request task status and file-related meta data based on the task ID.
 let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key)
 
 // Create a task
-client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
+client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english) { taskModel in
     guard let taskId = taskModel?.taskId else {
         Swift.debugPrint(taskModel?.errorDesc ?? "")
         return
@@ -199,7 +199,7 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
     let group = DispatchGroup()
     group.enter()
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    client.uploadFile(filepath: path!, password: "1234", params: [
+    client.uploadFile(filepath: path!, password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
@@ -212,12 +212,12 @@ client.createTask(url: CPDFConversion.PDF_TO_WORD) { taskModel in
             
     group.notify(queue: .main) {
         // execute Task
-        client.processFiles(taskId: taskId) { processFileModel in
+        client.processFiles(taskId: taskId, language: .english) { processFileModel in
             if let errorInfo = processFileModel?.errorDesc {
                 Swift.debugPrint(errorInfo)
             }
             // get task processing information
-            client.getTaskInfo(taskId: taskId) { taskInfoModel in
+            client.getTaskInfo(taskId: taskId, language: .english) { taskInfoModel in
                 guard let _model = taskInfoModel else {
                     Swift.debugPrint("error:....")
                     return
@@ -240,21 +240,21 @@ let client: CPDFClient = CPDFClient(publicKey: public_key, secretKey: secret_key
 
 Task { @MainActor in
     // Create a task
-    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD)
+    let taskModel = await client.createTask(url: CPDFConversion.PDF_TO_WORD, language: .english)
     let taskId = taskModel?.taskId ?? ""
 
     // upload File
     let path = Bundle.main.path(forResource: "test", ofType: "pdf")
-    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", params: [
+    let uploadFileModel = await client.uploadFile(filepath: path ?? "", password: "", language: .english, params: [
         CPDFFileUploadParameterKey.isContainAnnot.string() : "1",
         CPDFFileUploadParameterKey.isContainImg.string() : "1",
         CPDFFileUploadParameterKey.isFlowLayout.string() : "1"
     ], taskId: taskId)
     
     // execute Task
-    let _ = await client.processFiles(taskId: taskId)
+    let _ = await client.processFiles(taskId: taskId, language: .english)
     // get task processing information
-    let taskInfoModel = await client.getTaskInfo(taskId: taskId)
+    let taskInfoModel = await client.getTaskInfo(taskId: taskId, language: .english)
     guard let _model = taskInfoModel else {
         Swift.debugPrint("error:....")
         return
