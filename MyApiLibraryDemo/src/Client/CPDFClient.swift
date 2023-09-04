@@ -437,4 +437,36 @@ extension CPDFClient {
             }
         })
     }
+    
+    public func getAssetInfo(callback:@escaping (([Any]?)->Void)) {
+        if (!self.accessTokenIsValid()) {
+            self.auth { [weak self] model in
+                guard let _ = model else {
+                    callback(nil)
+                    return
+                }
+                self?.getAssetInfo(callback: callback)
+            }
+            return
+        }
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_ASSET_INFO, headers: self.getRequestHeaderInfo()) { reslut , dataDict, error in
+            var array: [Any] = []
+            if let _dataDict = dataDict {
+                for dict in _dataDict {
+                    array.append(dict)
+                }
+            }
+            callback(array)
+        }
+    }
+    
+    @available(macOS 10.15.0, iOS 13.0, *)
+    public func getAssetInfo() async -> [Any]? {
+        return await withCheckedContinuation({ continuation in
+            self.getAssetInfo(callback: { datas in
+                continuation.resume(returning: datas)
+            })
+        })
+    }
+    
 }
