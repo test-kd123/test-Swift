@@ -403,7 +403,7 @@ extension CPDFClient {
         })
     }
     
-    public func getFileInfoByKey(fileKey: String, callback:@escaping ((CPDFFileInfo?)->Void)) {
+    public func getFileInfoByKey(fileKey: String, language: CPDFClientLanguage = .chinese, callback:@escaping ((CPDFFileInfo?)->Void)) {
         if (!self.accessTokenIsValid()) {
             self.auth { [weak self] model in
                 guard let _ = model else {
@@ -412,12 +412,12 @@ extension CPDFClient {
                     callback(_model)
                     return
                 }
-                self?.getFileInfoByKey(fileKey: fileKey, callback: callback)
+                self?.getFileInfoByKey(fileKey: fileKey, language: language, callback: callback)
             }
             return
         }
         
-        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_FILE_INFO, parameter: [CPDFClient.Parameter.fileKey : fileKey], headers: self.getRequestHeaderInfo()) { result, dataDict, error in
+        CPDFHttpClient.GET(urlString: CPDFURL.API_V1_FILE_INFO, parameter: [CPDFClient.Parameter.fileKey : fileKey, CPDFClient.Parameter.language : language.rawValue], headers: self.getRequestHeaderInfo()) { result, dataDict, error in
             guard let _dataDict = dataDict else {
                 let model = CPDFFileInfo(dict: [:])
                 model.errorDesc = error
@@ -430,9 +430,9 @@ extension CPDFClient {
     }
     
     @available(macOS 10.15.0, iOS 13.0, *)
-    public func getFileInfoByKey(fileKey: String) async -> CPDFFileInfo? {
+    public func getFileInfoByKey(fileKey: String, language: CPDFClientLanguage = .chinese) async -> CPDFFileInfo? {
         return await withCheckedContinuation({ continuation in
-            self.getFileInfoByKey(fileKey: fileKey) { model in
+            self.getFileInfoByKey(fileKey: fileKey, language: language) { model in
                 continuation.resume(returning: model)
             }
         })
