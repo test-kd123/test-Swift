@@ -6,9 +6,9 @@
 
 ## Requirements
 
-Programming Environment: iOS/MacOS.
+Programming Environment: iOS 10+/MacOS 10.13+.
 
-Dependencies: Xcode.
+Dependencies: Xcode 13+.
 
 
 
